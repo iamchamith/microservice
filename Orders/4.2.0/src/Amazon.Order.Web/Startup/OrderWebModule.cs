@@ -1,9 +1,11 @@
 ﻿using Abp.AspNetCore;
 using Abp.AspNetCore.Configuration;
+using Abp.AutoMapper;
 using Abp.Modules;
 using Abp.Reflection.Extensions;
 using Amazon.Order.Configuration;
 using Amazon.Order.EntityFrameworkCore;
+using Amazon.Order.Web.Startup.Config;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 
@@ -32,11 +34,12 @@ namespace Amazon.Order.Web.Startup
                 .CreateControllersForAppServices(
                     typeof(OrderApplicationModule).GetAssembly()
                 );
+            Configuration.Modules.AbpAutoMapper().RegisterAutomapper();
         }
 
         public override void Initialize()
         {
-            IocManager.RegisterAssemblyByConvention(typeof(OrderWebModule).GetAssembly());
+            IocManager.RegisterIoc();
         }
     }
 }

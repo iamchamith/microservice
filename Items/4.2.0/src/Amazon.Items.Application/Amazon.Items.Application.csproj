@@ -19,7 +19,10 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="App.SharedKernel">
-      <HintPath>..\..\..\..\SharedKernel\App.SharedKernel\App.SharedKernel\bin\Debug\netcoreapp2.2\App.SharedKernel.dll</HintPath>
+      <HintPath>..\..\..\..\SharedKernel\App.SharedKernel\bin\Debug\netcoreapp2.2\App.SharedKernel.dll</HintPath>
+    </Reference>
+    <Reference Include="Inx.Service.Base">
+      <HintPath>..\..\..\..\..\..\..\inexis\Bank\Code\src\Base\Service\bin\Debug\netcoreapp2.2\Inx.Service.Base.dll</HintPath>
     </Reference>
   </ItemGroup>
 </Project>

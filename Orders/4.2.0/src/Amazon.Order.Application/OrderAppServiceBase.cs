@@ -1,13 +1,11 @@
 ﻿using Abp.Application.Services;
+using App.SharedKernel.Application;
 
 namespace Amazon.Order
 {
-    /// <summary>
-    /// Derive your application services from this class.
-    /// </summary>
-    public abstract class OrderAppServiceBase : ApplicationService
+    public abstract class OrderAppServiceBase : BaseAppService
     {
-        protected OrderAppServiceBase()
+        protected OrderAppServiceBase(IApplicationInjector injector) : base(injector)
         {
             LocalizationSourceName = OrderConsts.LocalizationSourceName;
         }

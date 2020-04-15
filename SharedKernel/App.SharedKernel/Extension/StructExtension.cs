@@ -20,5 +20,8 @@ namespace App.SharedKernel.Extension
         {
             return compare <= 0;
         }
+        public static bool IsValidAmount(this decimal compare) {
+            return compare > 0;
+        }
     }
 }
