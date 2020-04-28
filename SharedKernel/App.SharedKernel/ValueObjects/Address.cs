@@ -9,17 +9,21 @@ namespace App.SharedKernel.ValueObjects
     public class Address : ValueObject
     {
         [Required, StringLength(DataAnnotationsConst.NAME_LENGTH), Column(nameof(Number))]
-        public string Number { get; }
+        public string Number { get; private set; }
         [Required, StringLength(DataAnnotationsConst.NAME_LENGTH), Column(nameof(Street))]
-        public string Street { get; }
+        public string Street { get; private set; }
         [Required, StringLength(DataAnnotationsConst.NAME_LENGTH), Column(nameof(City))]
-        public string City { get; }
+        public string City { get; private set; }
 
         public Address(string city,string street,string number)
         {
             City = city;
             Street = street;
             Number = number;
+        }
+        public Address()
+        {
+
         }
         protected override IEnumerable<object> GetAtomicValues()
         {

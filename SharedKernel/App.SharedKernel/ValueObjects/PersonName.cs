@@ -20,6 +20,9 @@ namespace App.SharedKernel.ValueObjects
             yield return MiddleName;
             yield return LastName;
         }
+        public PersonName()
+        {
+        }
         public PersonName(string firstName,string middleName,string lastName)
         {
             FirstName = firstName;

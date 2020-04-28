@@ -13,6 +13,7 @@ namespace Amazon.Order.Web.Startup.Config
             iocManager.RegisterAssemblyByConvention(typeof(OrderWebModule).GetAssembly());
             iocManager.RegisterIfNot<IOrderAppService, OrderAppService>(DependencyLifeStyle.Transient);
             iocManager.RegisterIfNot<IApplicationInjector, ApplicationInjector>(DependencyLifeStyle.Transient);
+            iocManager.RegisterIfNot<IBasketAppService, BasketAppService>(DependencyLifeStyle.Transient);
         }
     }
 }

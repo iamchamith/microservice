@@ -1,16 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Abp.ObjectMapping;
+﻿using Abp.ObjectMapping;
+using Abp.Runtime.Caching;
 
 namespace App.SharedKernel.Application
 {
     public class ApplicationInjector : IApplicationInjector
     {
         public IObjectMapper Mapper { get; set; }
-        public ApplicationInjector(IObjectMapper mapper)
+        public ICache Cache { get; set; }
+        public ApplicationInjector(IObjectMapper mapper, ICacheManager cacheManager)
         {
             Mapper = mapper;
+            Cache = cacheManager.GetCache(GlobalConfig.CacheKey);
         }
     }
 }

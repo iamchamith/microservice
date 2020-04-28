@@ -12,6 +12,7 @@ namespace App.SharedKernel.Model
         public Request(int userId)
         {
             base.UserId = userId;
+            User = new User(UserId);
         }
         public Request(T1 item1, T2 item2, T3 item3)
         {
@@ -25,6 +26,7 @@ namespace App.SharedKernel.Model
             Item2 = item2;
             Item3 = item3;
             UserId = userId;
+            User = new User(UserId);
         }
     }
 }

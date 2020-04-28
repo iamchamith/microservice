@@ -1,0 +1,76 @@
+﻿@model Identity.Model.ViewModel.UserSettingViewModel
+
+@{
+    ViewData["Title"] = "UserSettings";
+    Layout = "~/Views/_LayoutAuthorizedGranted.cshtml";
+}
+
+<h1>User Settings</h1>
+<hr />
+<div class="row">
+    <div class="col-md-8">
+        <form action="UserSettings" method="put">
+            <h3>Name</h3>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="FirstName" class="control-label">First Name</label>
+                        <input type="text" asp-for="FirstName" class="form-control" value="@Model.FirstName" />
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="MiddleName" class="control-label">Middle Name</label>
+                        <input type="text" class="form-control" value="@Model.MiddleName" />
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="LastName" class="control-label">Last Name</label>
+                        <input type="text" class="form-control" value="@Model.LastName" />
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="Email" class="control-label">Email</label>
+                <input type="email" class="form-control" value="@Model.Email" />
+            </div>
+            <div class="form-group">
+                <label asp-for="PhoneNumber" class="control-label">Phone Number</label>
+                <input type="tel" class="form-control" value="@Model.PhoneNumber" />
+            </div>
+            <hr />
+            <h3>Address</h3>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="Number" class="control-label">Number</label>
+                        <input asp-for="Number" class="form-control" value="@Model.Number" />
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="Street" class="control-label">Street</label>
+                        <input asp-for="Street" class="form-control" value="@Model.Street" />
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="City" class="control-label">City</label>
+                        <input asp-for="City" class="form-control" value="@Model.City" />
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <div class="form-group">
+                <label asp-for="City" class="control-label">Two Factor Enabled?</label>
+                <input type="checkbox" class="form-control" id="TwoFactorEnabled" name="TwoFactorEnabled" value="@Model.TwoFactorEnabled" />
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+

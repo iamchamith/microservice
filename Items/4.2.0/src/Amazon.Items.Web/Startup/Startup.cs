@@ -10,14 +10,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-
+using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 namespace Amazon.Items.Web.Startup
 {
     public class Startup
     {
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            //Configure DbContext
             services.AddAbpDbContext<ItemsDbContext>(options =>
             {
                 DbContextOptionsConfigurer.Configure(options.DbContextOptions, options.ConnectionString);
@@ -31,10 +30,12 @@ namespace Amazon.Items.Web.Startup
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Item Api", Version = "v1" });
             });
-            //Configure Abp and Dependency Injection
+            services.AddSpaStaticFiles(configuration =>
+            {
+                configuration.RootPath = "ClientApp/build";
+            });
             return services.AddAbp<ItemsWebModule>(options =>
             {
-                //Configure Log4Net logging
                 options.IocManager.IocContainer.AddFacility<LoggingFacility>(
                     f => f.UseAbpLog4Net().WithConfig("log4net.config")
                 );
@@ -64,7 +65,16 @@ namespace Amazon.Items.Web.Startup
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{controller}/{action=Index}/{id?}");
+            });
+            app.UseSpa(spa =>
+            {
+                spa.Options.SourcePath = "ClientApp";
+
+                if (env.IsDevelopment())
+                {
+                    spa.UseReactDevelopmentServer(npmScript: "start");
+                }
             });
         }
     }

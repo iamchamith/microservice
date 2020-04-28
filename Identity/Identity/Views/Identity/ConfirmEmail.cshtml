@@ -1,0 +1,12 @@
+﻿@{
+    ViewData["Title"] = "ConfirmEmail";
+    Layout = "~/Views/_Layout.cshtml";
+    string message = (string)ViewData["message"] ?? "";
+}
+<form class="form-signin" method="post" action="/identity/sendemailconfirmation">
+    <h3>Confirm Email</h3>
+    <p>
+        @message.
+        <a href="/identity/login">Please login to the system.</a>
+    </p>
+</form>

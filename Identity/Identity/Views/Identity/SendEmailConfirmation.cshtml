@@ -1,0 +1,25 @@
+﻿@model string
+@{
+    ViewData["Title"] = "SendEmailConfirmation";
+    Layout = "~/Views/_Layout.cshtml";
+    string message = (string)ViewData["message"] ?? "";
+    string token = (string)ViewData["token"] ?? "";
+}
+<form class="form-signin" method="post" action="/identity/sendemailconfirmation">
+    <h1 class="h3 mb-3 font-weight-normal">Send Email Confirmation</h1>
+    <label for="inputEmail" class="sr-only">Email address</label>
+    <input type="email" id="Email" name="Email" class="form-control" placeholder="Email address" required autofocus value="@Model" />
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Send</button>
+    <br />
+    <a href="/identity/login">Go to login</a>
+    @if (!string.IsNullOrEmpty(message))
+    {
+        <div class="alert alert-danger" role="alert">@message</div>
+    }
+    @if (!string.IsNullOrEmpty(token))
+    {
+        <a href="@token">Email Confirmation callback</a>
+    }
+</form>
+
+

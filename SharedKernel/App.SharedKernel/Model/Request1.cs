@@ -19,6 +19,7 @@ namespace App.SharedKernel.Model
         {
             Item = item;
             base.UserId = userId;
+            User = new User(UserId);
         }
     }
 }

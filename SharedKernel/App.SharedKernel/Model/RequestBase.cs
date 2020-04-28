@@ -6,5 +6,6 @@ namespace App.SharedKernel.Model
     public class RequestBase
     {
         public int UserId { get; protected set; }
+        public User User { get; protected set; }
     }
 }

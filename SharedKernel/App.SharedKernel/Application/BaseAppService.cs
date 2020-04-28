@@ -1,5 +1,6 @@
 ﻿using Abp.Application.Services;
 using Abp.ObjectMapping;
+using Abp.Runtime.Caching;
 using App.SharedKernel.Model;
 using System.Collections.Generic;
 
@@ -8,9 +9,11 @@ namespace App.SharedKernel.Application
     public class BaseAppService : ApplicationService
     {
         protected IObjectMapper Mapper;
+        protected ICache Cache;
         public BaseAppService(IApplicationInjector injector)
         {
             Mapper = injector.Mapper;
+            Cache = injector.Cache;
         }
         protected Response<T> Response<T>(T item)
         {

@@ -11,5 +11,9 @@
         public static string MakeThisRedable(this string message) {
             return message;
         }
+        public static string TrimAndToLower(this string text)
+        {
+            return (text.IsNull()) ? "" : text.Trim().ToLower();
+        }
     }
 }

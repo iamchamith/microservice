@@ -1,4 +1,5 @@
 ﻿using Abp.EntityFrameworkCore;
+using Amazon.Order.Entities;
 using Microsoft.EntityFrameworkCore;
 using ety = Amazon.Order.Entities;
 namespace Amazon.Order.EntityFrameworkCore
@@ -15,6 +16,12 @@ namespace Amazon.Order.EntityFrameworkCore
             : base(options)
         {
 
+        }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<CustomerInfo>().OwnsOne(c => c.Address);
+            modelBuilder.Entity<CustomerInfo>().OwnsOne(c => c.Name);
+            modelBuilder.Entity<Shipping>().OwnsOne(c => c.Address);
         }
     }
 }
