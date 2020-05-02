@@ -1,15 +1,24 @@
 ﻿using App.SharedKernel.Exception;
+using App.SharedKernel.Utilities;
 using Newtonsoft.Json;
 
 namespace App.SharedKernel.Extension
 {
     public static class JsonExtension
     {
+        static JsonSerializerSettings _jsonSerializerDefaultSetting;
+        static JsonExtension()
+        {
+            _jsonSerializerDefaultSetting = new JsonSerializerSettings
+            {
+                ContractResolver = new JsonPrivateSetterResolver()
+            };
+        }
         public static T ToObject<T>(this string jsonString)
         {
             try
             {
-                return JsonConvert.DeserializeObject<T>(jsonString);
+                return JsonConvert.DeserializeObject<T>(jsonString, _jsonSerializerDefaultSetting);
             }
             catch (System.Exception)
             {
@@ -17,11 +26,11 @@ namespace App.SharedKernel.Extension
             }
 
         }
-        public static string ToString<T>(this T obj)
+        public static string ToJsonString<T>(this T obj)
         {
             try
             {
-                return Newtonsoft.Json.JsonConvert.SerializeObject(obj);
+                return JsonConvert.SerializeObject(obj);
             }
             catch (System.Exception)
             {

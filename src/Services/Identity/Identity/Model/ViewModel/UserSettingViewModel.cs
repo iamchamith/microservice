@@ -1,4 +1,5 @@
-﻿using Identity.Model.Entities;
+﻿using App.SharedKernel.Utilities;
+using Identity.Model.Entities;
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 
@@ -6,31 +7,33 @@ namespace Identity.Model.ViewModel
 {
     public class UserSettingViewModel
     {
+        [Key]
         public int Id { get; set; }
         public string UserId { get; set; }
+        [Required, StringLength(DataAnnotationsConst.NAME_LENGTH), DataType(DataType.Text)]
         public string FirstName { get; set; }
-        [StringLength(50)]
+        [StringLength(DataAnnotationsConst.NAME_LENGTH), DataType(DataType.Text)]
         public string MiddleName { get; set; }
-        [Required]
-        [StringLength(50)]
+        [Required,StringLength(DataAnnotationsConst.NAME_LENGTH), DataType(DataType.Text)]
         public string LastName { get; set; }
 
-        [Required]
-        [StringLength(50)]
+        [Required, StringLength(DataAnnotationsConst.NAME_LENGTH), DataType(DataType.Text)]
         public string Number { get; set; }
-        [Required]
-        [StringLength(50)]
+        [Required, StringLength(DataAnnotationsConst.NAME_LENGTH), DataType(DataType.Text)]
         public string Street { get; set; }
-        [Required]
-        [StringLength(50)]
+        [Required, StringLength(DataAnnotationsConst.NAME_LENGTH), DataType(DataType.Text)]
         public string City { get; set; }
 
+        [Required, StringLength(DataAnnotationsConst.EMAIL_LENGTH), DataType(DataType.EmailAddress)]
         public string Email { get; set; }
+        [Required, StringLength(DataAnnotationsConst.PHONE_LENGTH), DataType(DataType.PhoneNumber)]
         public string PhoneNumber { get; set; }
-
         public bool TwoFactorEnabled { get; set; }
+        public UserSettingViewModel()
+        {
 
-        public UserSettingViewModel(IdentityUser identityUser,UserInfo userinfo)
+        }
+        public UserSettingViewModel(IdentityUser identityUser, UserInfo userinfo)
         {
             Id = userinfo.Id;
             UserId = userinfo.UserId;

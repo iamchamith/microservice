@@ -30,13 +30,14 @@ namespace Identity
                 .AddEntityFrameworkStores<IdentityContext>()
                 .AddDefaultTokenProviders();
 
-
-
             services.ConfigureApplicationCookie(config =>
             {
                 config.Cookie.Name = "Identity.Cookie";
-                config.LoginPath = "/Home/Authentication";
+                config.LoginPath = "/identity/login";
+                config.AccessDeniedPath = "/identity/login1";
             });
+
+
             services.AddMvc()
         .AddMvcOptions(options => options.EnableEndpointRouting = false);
             services.AddMailKit(optionBuilder =>

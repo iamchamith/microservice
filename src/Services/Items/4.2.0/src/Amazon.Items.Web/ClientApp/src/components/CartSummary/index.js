@@ -1,1 +1,2 @@
-﻿export { CartSummary } from './CartSummary';
+﻿import CartSummary from './CartSummary';
+export { CartSummary }; 

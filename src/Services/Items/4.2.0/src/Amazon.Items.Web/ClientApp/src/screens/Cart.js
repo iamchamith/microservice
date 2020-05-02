@@ -3,7 +3,8 @@ import { connect } from 'react-redux';
 import { CartItem } from '../components/CartItem';
 import { NavLink } from 'reactstrap';
 import { Link } from 'react-router-dom';
-export default class Cart extends React.Component {
+import BaseScreen from './BaseScreen';
+export default class Cart extends BaseScreen {
     constructor(props) {
         super(props);
     }

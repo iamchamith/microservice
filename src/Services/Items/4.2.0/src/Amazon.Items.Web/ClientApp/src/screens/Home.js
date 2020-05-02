@@ -1,8 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import Item from '../components/Item/Item';
+import { Item } from '../components/Item';
 import { ItemSearch } from '../components/ItemSearch';
-export default class Home extends React.Component {
+import BaseScreen from './BaseScreen';
+export default class Home extends BaseScreen {
     constructor(props) {
         super(props);
     }

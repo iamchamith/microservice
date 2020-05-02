@@ -5,12 +5,10 @@ namespace App.SharedKernel.Application
 {
     public class ApplicationInjector : IApplicationInjector
     {
-        public IObjectMapper Mapper { get; set; }
-        public ICache Cache { get; set; }
+        public IObjectMapper Mapper { get; set; } 
         public ApplicationInjector(IObjectMapper mapper, ICacheManager cacheManager)
         {
-            Mapper = mapper;
-            Cache = cacheManager.GetCache(GlobalConfig.CacheKey);
+            Mapper = mapper; 
         }
     }
 }

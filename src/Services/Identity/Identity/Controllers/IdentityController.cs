@@ -1,6 +1,7 @@
 ﻿using App.SharedKernel.Extension;
 using Identity.Model.ViewModel;
 using Identity.Utility;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NETCore.MailKit.Core;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Identity.Controllers
 {
-    public class IdentityController : Controller
+    public class IdentityController : IdentityBaseController
     {
         private readonly IdentityService _identityService;
         IEmailService _emailService { get; set; }
@@ -141,14 +142,14 @@ namespace Identity.Controllers
             return View();
         }
 
-        [HttpGet]
+        [HttpGet, Authorize]
         public IActionResult ResetPassword(string token, string email)
         {
             var model = new ResetPasswordViewModel { Token = token, Email = email };
             return View(model);
         }
 
-        [HttpPost]
+        [HttpPost, Authorize]
         public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
         {
             var result = ActionResultFilter(await _identityService.SetHttpContext(HttpContext).ResetPassword(model));
@@ -158,41 +159,20 @@ namespace Identity.Controllers
         #endregion
 
 
-        [HttpGet]
+        [HttpGet, Authorize]
         public async Task<IActionResult> UserSettings()
         {
             var result = ActionResultFilter(await _identityService.SetHttpContext(HttpContext).GetUserSettings());
             if (result.Item1.IsOk())
                 return View(result.Item2);
             else
-                return BadRequest(result.Item2);
-        }      
+                return RenderErrorView(result.Item1);
+        }
 
         [HttpPut]
         public IActionResult UserSettings([FromForm]UserSettingViewModel model)
         {
             return View();
-        }
-
-        public (int, object) ActionResultFilter(IActionResult actionResult)
-        {
-
-            var resultOk = actionResult as OkObjectResult;
-            if (!resultOk.IsNull())
-            {
-                return (200, resultOk.Value);
-            }
-            var resultOke = actionResult as OkResult;
-            if (!resultOke.IsNull())
-            {
-                return (200, "success");
-            }
-            var resultBad = actionResult as BadRequestObjectResult;
-            if (!resultBad.IsNull())
-            {
-                return (400, resultBad.Value);
-            }
-            return (500, resultBad.Value);
         }
     }
 }

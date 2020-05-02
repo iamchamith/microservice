@@ -25,12 +25,12 @@ namespace App.SharedKernel.Model
         }
         public Search SetSearchTerm(string searchTerm)
         {
-            SearchTerm = searchTerm.Trim();
+            SearchTerm = searchTerm ?? "".Trim();
             return this;
         }
         public Search SetOrderBy(string orderBy, bool isAsc)
         {
-            OrderBy = orderBy.Trim();
+            OrderBy = orderBy ?? "".Trim();
             IsAsc = isAsc;
             return this;
         }

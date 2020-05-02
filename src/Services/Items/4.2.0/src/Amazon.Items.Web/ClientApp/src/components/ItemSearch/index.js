@@ -1,1 +1,2 @@
-﻿export { ItemSearch } from './ItemSearch';
+﻿import ItemSearch from './ItemSearch';
+export { ItemSearch };

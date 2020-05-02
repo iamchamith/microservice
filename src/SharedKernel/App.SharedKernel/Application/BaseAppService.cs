@@ -1,6 +1,5 @@
 ﻿using Abp.Application.Services;
 using Abp.ObjectMapping;
-using Abp.Runtime.Caching;
 using App.SharedKernel.Model;
 using System.Collections.Generic;
 
@@ -8,12 +7,10 @@ namespace App.SharedKernel.Application
 {
     public class BaseAppService : ApplicationService
     {
-        protected IObjectMapper Mapper;
-        protected ICache Cache;
+        protected IObjectMapper Mapper; 
         public BaseAppService(IApplicationInjector injector)
         {
-            Mapper = injector.Mapper;
-            Cache = injector.Cache;
+            Mapper = injector.Mapper; 
         }
         protected Response<T> Response<T>(T item)
         {
@@ -24,6 +21,10 @@ namespace App.SharedKernel.Application
             return new Response<List<T>, PageList>(item, new PageList().SetPageResult(recordCount, search));
         }
 
+        protected Request<TOut> Request<TIn, TOut>(Request<TIn> requestIn, TOut requestOut) {
+
+            return new Request<TOut>(requestOut, requestIn.UserId);
+        }
        
     }
 }

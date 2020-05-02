@@ -1,1 +1,2 @@
-﻿export { CartItem } from './CartItem';
+﻿import CartItem from './CartItem';
+export { CartItem }; 

@@ -21,5 +21,6 @@ namespace Identity.Model.Infastructure
             modelBuilder.Entity<UserInfo>().OwnsOne(c => c.Address);
             modelBuilder.Entity<UserInfo>().OwnsOne(c => c.Name);
         }
+        public DbSet<Identity.Model.ViewModel.UserSettingViewModel> UserSettingViewModel { get; set; }
     }
 }

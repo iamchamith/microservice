@@ -1,7 +1,7 @@
 ﻿import React from 'react';
 import { connect } from 'react-redux';
-
-export default class ItemInfo extends React.Component {
+import BaseScreen from './BaseScreen';
+export default class ItemInfo extends BaseScreen {
     constructor(props) {
         super(props);
     }

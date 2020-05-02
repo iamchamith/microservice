@@ -198,7 +198,7 @@ namespace Identity.Controllers
             {
                 var user = await _userManager.GetUserAsync(_user);
                 if (user.IsNull())
-                    return BadRequest(Enums.Errors.WhenAuthorizationUserNotFound.ToString());
+                    return Unauthorized(Enums.Errors.WhenAuthorizationUserNotFound.ToString());
                 var result = await _userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
                 if (result.Succeeded)
                     return Ok();
@@ -211,20 +211,20 @@ namespace Identity.Controllers
             }
         }
 
-        [HttpGet("users/myinfo")]
+        [HttpGet("users/myinfo"),Authorize]
         public async Task<IActionResult> GetUserSettings()
         {
             try
             {
                 if (_user.IsNull())
-                    return BadRequest(Enums.Errors.WhenAuthorizationUserNotFound.ToString());
+                    return Unauthorized(Enums.Errors.WhenAuthorizationUserNotFound.ToString());
                 var userid = _user.FindFirstValue(ClaimTypes.NameIdentifier);
                 if (userid.IsNull())
-                    return BadRequest(Enums.Errors.WhenAuthorizationUserNotFound.ToString());
+                    return Unauthorized(Enums.Errors.WhenAuthorizationUserNotFound.ToString());
                 var userInfo = await _dbContext.UserInfo.SingleOrDefaultAsync(p => p.UserId == userid);
                 var userIdentity = await _userManager.GetUserAsync(_user);
                 if (userInfo.IsNull() || userIdentity.IsNull())
-                    return BadRequest(Enums.Errors.WhenAuthorizationUserNotFound.ToString());
+                    return Unauthorized(Enums.Errors.WhenAuthorizationUserNotFound.ToString());
                 return Ok(new UserSettingViewModel(userIdentity, userInfo));
             }
             catch (Exception)

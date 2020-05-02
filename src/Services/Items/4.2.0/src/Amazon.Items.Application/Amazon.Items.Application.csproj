@@ -16,13 +16,11 @@
   <ItemGroup>
     <PackageReference Include="Abp.EntityFrameworkCore" Version="4.9.0" />
     <PackageReference Include="Abp.AutoMapper" Version="4.9.0" />
+    <PackageReference Include="StackExchange.Redis" Version="2.1.30" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="App.SharedKernel">
-      <HintPath>..\..\..\..\SharedKernel\App.SharedKernel\bin\Debug\netcoreapp2.2\App.SharedKernel.dll</HintPath>
-    </Reference>
-    <Reference Include="Inx.Service.Base">
-      <HintPath>..\..\..\..\..\..\..\inexis\Bank\Code\src\Base\Service\bin\Debug\netcoreapp2.2\Inx.Service.Base.dll</HintPath>
+      <HintPath>..\..\..\..\..\SharedKernel\App.SharedKernel\bin\Debug\netcoreapp2.2\App.SharedKernel.dll</HintPath>
     </Reference>
   </ItemGroup>
 </Project>

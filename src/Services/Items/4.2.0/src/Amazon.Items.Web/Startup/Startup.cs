@@ -11,12 +11,16 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
+using StackExchange.Redis;
+using Amazon.Items.Web.Startup.Config;
+
 namespace Amazon.Items.Web.Startup
 {
     public class Startup
     {
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
+            GlobalConfigConfig.Register();
             services.AddAbpDbContext<ItemsDbContext>(options =>
             {
                 DbContextOptionsConfigurer.Configure(options.DbContextOptions, options.ConnectionString);
@@ -34,6 +38,8 @@ namespace Amazon.Items.Web.Startup
             {
                 configuration.RootPath = "ClientApp/build";
             });
+
+            services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect("127.0.0.1:6379,allowAdmin=true"));
             return services.AddAbp<ItemsWebModule>(options =>
             {
                 options.IocManager.IocContainer.AddFacility<LoggingFacility>(
