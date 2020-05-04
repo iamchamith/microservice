@@ -1,25 +1,22 @@
 ﻿import React from 'react';
 import { connect } from 'react-redux';
+import './CartItem.css';
 export default class CartItem extends React.Component {
     constructor(props) {
         super(props);
     }
-
     render() {
         return (
             <React.Fragment>
                 <div class="col-12 col-sm-12 col-md-2 text-center">
-                    <img class="img-responsive" src="http://placehold.it/120x80" alt="prewiew" width="120" height="80" />
+                    <img class="img-responsive" src={this.props.data.image} alt="prewiew" width="120" height="80" />
                 </div>
                 <div class="col-12 text-sm-center col-sm-12 text-md-left col-md-6">
-                    <h4 class="product-name"><strong>Product Name</strong></h4>
-                    <h4>
-                        <small>Product description</small>
-                    </h4>
+                    <h4 class="product-name"><strong>{this.props.data.name}</strong></h4>
                 </div>
                 <div class="col-12 col-sm-12 text-sm-center col-md-4 text-md-right row">
                     <div class="col-3 col-sm-3 col-md-6 text-md-right" style={{ paddingTop: '5px' }}>
-                        <h6><strong>25.00 <span class="text-muted">x</span></strong></h6>
+                        <h6><strong>${this.props.data.price}<span class="text-muted">x</span></strong></h6>
                     </div>
                     <div class="col-4 col-sm-4 col-md-4">
                         <div class="quantity">
@@ -31,7 +28,7 @@ export default class CartItem extends React.Component {
                     </div>
                     <div class="col-2 col-sm-2 col-md-2 text-right">
                         <button type="button" class="btn btn-outline-danger btn-xs">
-                            <i class="fa fa-trash" aria-hidden="true"></i>
+                           X
                         </button>
                     </div>
                 </div>

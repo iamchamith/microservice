@@ -6,7 +6,7 @@ class _Dropdown extends React.Component {
         super(props);
         this.toggle = this.toggle.bind(this);
         this.state = {
-            dropdownOpen: false,
+            dropdownOpen: false
         };
     }
     toggle() {
@@ -18,8 +18,8 @@ class _Dropdown extends React.Component {
 
     }
     render() {
-        const majors = this.state.majors.map(item => (
-            <MajorTuple key={item.id} data={item} />
+        const brands = this.props.items.map(item => (
+            <DropdownItem key={item.key}>{item.value}</DropdownItem>
         ));
         return (
             <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
@@ -27,13 +27,7 @@ class _Dropdown extends React.Component {
                     {this.props.titile}
                 </DropdownToggle>
                 <DropdownMenu>
-                    <DropdownItem header>Header</DropdownItem>
-                    <DropdownItem>Some Action</DropdownItem>
-                    <DropdownItem disabled>Action (disabled)</DropdownItem>
-                    <DropdownItem divider />
-                    <DropdownItem>Foo Action</DropdownItem>
-                    <DropdownItem>Bar Action</DropdownItem>
-                    <DropdownItem>Quo Action</DropdownItem>
+                    {brands}
                 </DropdownMenu>
             </Dropdown>
         );

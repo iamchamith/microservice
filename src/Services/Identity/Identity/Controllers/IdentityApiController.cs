@@ -35,11 +35,15 @@ namespace Identity.Controllers
             _emailService = emailService;
             _dbContext = dbContext;
         }
-        public IdentityApiController SetHttpContext(HttpContext context) {
+
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public IdentityApiController SetHttpContext(HttpContext context)
+        {
             _httpContext = context;
             _user = _httpContext.User;
             return this;
         }
+
         [HttpPost("login"), AllowAnonymous]
         public async Task<IActionResult> Login([FromBody] LoginViewModel model)
         {
@@ -63,6 +67,7 @@ namespace Identity.Controllers
                 throw;
             }
         }
+
         [HttpGet("logout")]
         public async Task<IActionResult> Logout()
         {
@@ -76,6 +81,7 @@ namespace Identity.Controllers
                 throw;
             }
         }
+
         [HttpPost("register"), AllowAnonymous]
         public async Task<IActionResult> Register([FromBody] RegisterViewModel model)
         {
@@ -112,6 +118,7 @@ namespace Identity.Controllers
                 throw;
             }
         }
+
         [HttpGet("users/{email}/confirmemail"), AllowAnonymous]
         public async Task<IActionResult> GetUserEmailConfirmationToken(string email)
         {
@@ -131,6 +138,7 @@ namespace Identity.Controllers
                 throw;
             }
         }
+
         [HttpPost("users/{email}/confirmemail"), AllowAnonymous]
         public async Task<IActionResult> ConfirmUserEmail(string email, string token)
         {
@@ -153,6 +161,7 @@ namespace Identity.Controllers
                 throw;
             }
         }
+
         [HttpGet("users/password/forget"), AllowAnonymous]
         public async Task<IActionResult> ForgetPassword([FromBody] ForgetPasswordViewModel model)
         {
@@ -169,6 +178,7 @@ namespace Identity.Controllers
                 throw;
             }
         }
+
         [HttpPost("users/password/reset"), AllowAnonymous]
         public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordViewModel model)
         {
@@ -191,6 +201,7 @@ namespace Identity.Controllers
             }
 
         }
+
         [HttpPost("users/password/change"), Authorize]
         public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordViewModel model)
         {
@@ -211,7 +222,7 @@ namespace Identity.Controllers
             }
         }
 
-        [HttpGet("users/myinfo"),Authorize]
+        [HttpGet("users/myinfo"), Authorize]
         public async Task<IActionResult> GetUserSettings()
         {
             try
