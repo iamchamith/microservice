@@ -51,10 +51,6 @@ namespace Amazon.Items.Web.Startup
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             app.UseAbp(); //Initializes ABP framework.
-            app.UseSwagger().UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-            });
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -64,7 +60,10 @@ namespace Amazon.Items.Web.Startup
             {
                 app.UseExceptionHandler("/Error");
             }
-
+            app.UseSwagger().UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+            });
             app.UseStaticFiles();
 
             app.UseMvc(routes =>

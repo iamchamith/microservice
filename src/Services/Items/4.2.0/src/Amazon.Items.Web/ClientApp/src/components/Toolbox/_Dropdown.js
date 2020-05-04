@@ -5,8 +5,10 @@ class _Dropdown extends React.Component {
     constructor(props) {
         super(props);
         this.toggle = this.toggle.bind(this);
+        this.changeTitile = this.changeTitile.bind(this);
         this.state = {
-            dropdownOpen: false
+            dropdownOpen: false,
+            titile:'All Brands'
         };
     }
     toggle() {
@@ -17,14 +19,17 @@ class _Dropdown extends React.Component {
     async componentDidMount() {
 
     }
+    changeTitile(e) {
+        this.setState({ titile: e.target.innerText });
+    }
     render() {
         const brands = this.props.items.map(item => (
-            <DropdownItem key={item.key}>{item.value}</DropdownItem>
+            <DropdownItem key={item.key} onClick={this.changeTitile}>{item.value}</DropdownItem>
         ));
         return (
             <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
                 <DropdownToggle caret>
-                    {this.props.titile}
+                    {this.state.titile}
                 </DropdownToggle>
                 <DropdownMenu>
                     {brands}

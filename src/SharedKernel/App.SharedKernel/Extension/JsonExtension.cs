@@ -24,7 +24,17 @@ namespace App.SharedKernel.Extension
             {
                 throw new BadRequestException($"Cannot convert {jsonString} to {typeof(T)}");
             }
-
+        }
+        public static T ToObject<T>(this string jsonString, bool returnDefault) where T : new()
+        {
+            try
+            {
+                return JsonConvert.DeserializeObject<T>(jsonString, _jsonSerializerDefaultSetting);
+            }
+            catch (System.Exception)
+            {
+                return new T();
+            }
         }
         public static string ToJsonString<T>(this T obj)
         {

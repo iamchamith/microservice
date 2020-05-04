@@ -1,6 +1,6 @@
 ﻿class GlobalConfig {
 
-    static Api = "http://localhost:5000/api";
+    static ApiV1 = "http://localhost:5000/items-service/api/v1";
 
 }
 export default GlobalConfig;

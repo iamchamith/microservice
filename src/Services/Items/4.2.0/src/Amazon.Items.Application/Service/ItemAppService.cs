@@ -24,7 +24,7 @@ namespace Amazon.Items.Service
                 IApplicationInjector applicationInjector) : base(applicationInjector)
             {
                 _itemRepository = itemRepository;
-                _itemCache = itemCache;
+                _itemCache = itemCache.SetDatabase(nameof(Item));
             }
 
             public async Task<Response<List<ItemDto>, PageList>> GetItems(Request<Search> request)
@@ -34,10 +34,9 @@ namespace Amazon.Items.Service
                     var cacheResult = await _itemCache.Get();
                     var result = (cacheResult.Item1) ? cacheResult.Item2 : await _itemCache.RefillIfNot(await _itemRepository.GetAllAsNoTraking().ToListAsync());
 
-                    var orderByRequest = request.Item.OrderByQuery.ToObject<ItemOrderByRequest>();
-                    var searchByRequest = request.Item.SearchTerm.ToObject<ItemSearchByRequest>();
-
-                    if (!string.IsNullOrEmpty(searchByRequest.Name))
+                    var orderByRequest = request.Item.OrderByQuery.ToObject<ItemOrderByRequest>(returnDefault: true) ?? new ItemOrderByRequest();
+                    var searchByRequest = request.Item.SearchTerm.ToObject<ItemSearchByRequest>(returnDefault: true) ?? new ItemSearchByRequest();
+                    if (!string.IsNullOrEmpty(searchByRequest?.Name))
                         result = result.Where(p => p.Name.StartsWith(request.Item.SearchTerm, System.StringComparison.InvariantCultureIgnoreCase)).ToList();
                     if (searchByRequest.MinPrice.HasValue)
                         result = result.Where(p => p.Price >= searchByRequest.MinPrice.Value).ToList();
@@ -52,7 +51,13 @@ namespace Amazon.Items.Service
                     result = orderByRequest.Review ? result.OrderBy(p => p.Price).ToList() : result.OrderByDescending(p => p.Price).ToList();
                     if (!request.Item.Take.IsZero())
                         result = result.Skip(request.Item.Skip).Take(request.Item.Take).ToList();
-                    return PageResponse(Mapper.Map<List<ItemDto>>(result), count, request.Item);
+
+                    var dtos = Mapper.Map<List<ItemDto>>(result);
+                    dtos.ForEach(item =>
+                    {
+                        item.SetImageWithPath();
+                    });
+                    return PageResponse(dtos, count, request.Item);
                 }
                 catch (System.Exception)
                 {
@@ -65,7 +70,7 @@ namespace Amazon.Items.Service
                 {
                     var item = (await _itemRepository.GetAsync(request.Item))
                         .ThrowExceptionIfNull();
-                    return Response(Mapper.Map<ItemDto>(request.Item));
+                    return Response(Mapper.Map<ItemDto>(item).SetImageWithPath());
                 }
                 catch (System.Exception)
                 {

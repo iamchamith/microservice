@@ -1,5 +1,4 @@
-﻿using Abp.Application.Services;
-using App.SharedKernel.Application;
+﻿using App.SharedKernel.Application;
 
 namespace Amazon.Items
 {

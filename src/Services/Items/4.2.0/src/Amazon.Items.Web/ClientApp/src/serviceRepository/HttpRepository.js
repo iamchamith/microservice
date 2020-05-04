@@ -3,7 +3,7 @@ const axios = require("axios").default;
 
 class HttpRepository {
     constructor() {
-        this.ApiEndpoint = GlobalConfig.Api;
+        this.ApiEndpoint = GlobalConfig.ApiV1;
         axios.defaults.headers.post["Content-Type"] =
             "application/x-www-form-urlencoded";
     }
