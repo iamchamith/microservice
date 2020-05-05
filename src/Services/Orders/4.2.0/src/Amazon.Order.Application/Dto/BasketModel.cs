@@ -1,4 +1,5 @@
-﻿using App.SharedKernel.Exception;
+﻿using Abp.Domain.Entities;
+using App.SharedKernel.Exception;
 using App.SharedKernel.Extension;
 using App.SharedKernel.Model;
 using System;
@@ -6,7 +7,7 @@ using System;
 namespace Amazon.Order.Dto
 {
     [Serializable]
-    public class BasketModel
+    public class BasketModel:Entity
     {
         public int UserId { get; private set; }
         public int Id { get; set; }

@@ -16,7 +16,7 @@ namespace Identity
         {
             services.AddDbContext<IdentityContext>(config =>
             {
-                config.UseSqlServer(GlobalConfig.ConnectionString);
+                config.UseSqlServer(IdentityGlobalConfig.ConnectionString);
             });
             services.AddIdentity<IdentityUser, IdentityRole>(config =>
             {

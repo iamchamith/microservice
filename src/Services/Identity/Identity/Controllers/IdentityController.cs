@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NETCore.MailKit.Core;
+using System;
 using System.Threading.Tasks;
 
 namespace Identity.Controllers
@@ -32,7 +33,11 @@ namespace Identity.Controllers
             ViewData["message"] = string.Empty;
             var result = ActionResultFilter(await _identityService.SetHttpContext(HttpContext).Login(model));
             if (result.Item1.IsOk())
+            {
+                CookieOptions option = new CookieOptions { Expires = DateTime.Now.AddMinutes(AppConst.LOGIN_EXPIRE_AFTER) };
+                Response.Cookies.Append("bearer", result.Item2.ToString(), option);
                 return RedirectToAction(nameof(UserSettings));
+            }
             else if (result.Item1.IsOk())
                 ViewData["message"] = result.Item2;
             return View();
@@ -77,7 +82,15 @@ namespace Identity.Controllers
         [HttpPost, ActionName("SendEmailConfirmation")]
         public async Task<IActionResult> SendEmailConfirmationSubmit(string email)
         {
-            var result = ActionResultFilter(await _identityService.SetHttpContext(HttpContext).GetUserEmailConfirmationToken(email));
+            email = email ?? "".TrimAndToLower();
+            if (string.IsNullOrEmpty(email) || !email.IsValidEmail())
+            {
+                ViewData["message"] = "Invalid email.";
+                return View(nameof(SendEmailConfirmation), email);
+            }
+
+            var relativeUrl = $"/identity/{nameof(ConfirmEmail)}?" + "email={0}&token={1}";
+            var result = ActionResultFilter(await _identityService.SetHttpContext(HttpContext).GetUserEmailConfirmationToken(email, relativeUrl));
             if (result.Item1.IsOk())
                 ViewData["token"] = Url.Action(nameof(ConfirmEmail), "identity", new { userId = email, token = result.Item2 });
             else
@@ -120,12 +133,12 @@ namespace Identity.Controllers
         }
 
         #region forget and reset password
-        [HttpGet]
+        [HttpGet, AllowAnonymous]
         public IActionResult ForgetPassword()
         {
             return View();
         }
-        [HttpPost]
+        [HttpPost, AllowAnonymous]
         public async Task<IActionResult> ForgetPassword([FromForm]ForgetPasswordViewModel model)
         {
             ViewData["message"] = string.Empty;
@@ -170,8 +183,9 @@ namespace Identity.Controllers
         }
 
         [HttpPut]
-        public IActionResult UserSettings([FromForm]UserSettingViewModel model)
+        public async Task<IActionResult> UserSettings([FromForm]UserSettingViewModel model)
         {
+            var result = ActionResultFilter(await _identityService.SetHttpContext(HttpContext).UpdateUserSettings(model));
             return View();
         }
     }

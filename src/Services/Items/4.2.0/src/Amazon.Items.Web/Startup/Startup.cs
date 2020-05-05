@@ -13,14 +13,20 @@ using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using StackExchange.Redis;
 using Amazon.Items.Web.Startup.Config;
+using Microsoft.Extensions.Configuration;
 
 namespace Amazon.Items.Web.Startup
 {
     public class Startup
     {
+        IConfiguration _configuration { get; set; }
+        public Startup(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            GlobalConfigConfig.Register();
+            new ItemGlobalConfig(_configuration);
             services.AddAbpDbContext<ItemsDbContext>(options =>
             {
                 DbContextOptionsConfigurer.Configure(options.DbContextOptions, options.ConnectionString);

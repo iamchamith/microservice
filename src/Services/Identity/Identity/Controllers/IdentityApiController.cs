@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using App.SharedKernel.Exception;
 using App.SharedKernel.Extension;
+using App.SharedKernel.ValueObjects;
 using Identity.Model.Entities;
 using Identity.Model.Infastructure;
 using Identity.Model.ViewModel;
@@ -12,8 +14,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using NETCore.MailKit.Core;
-
+using App.SharedKernel.Messaging.Email;
 namespace Identity.Controllers
 {
     [Route("api/identity")]
@@ -51,16 +52,21 @@ namespace Identity.Controllers
             {
                 var user = await _userManager.FindByEmailAsync(model.Email);
                 if (user.IsNull())
-                    return BadRequest(Enums.Errors.WhenLoginUserCannotFind.ToString());
+                    return BadRequest(IdentityEnums.Errors.WhenLoginUserCannotFind.ToString());
                 else if (!user.EmailConfirmed)
-                    return BadRequest(Enums.Errors.WhenLoginEmailDoesNotConfirm.ToString());
+                    return BadRequest(IdentityEnums.Errors.WhenLoginEmailDoesNotConfirm.ToString());
 
                 var result = await _signInManager.PasswordSignInAsync(model.Email,
                                    model.Password, model.RememberMe, lockoutOnFailure: true);
+
                 if (result.Succeeded)
-                    return Ok();
+                {
+                    var userInfo = await _dbContext.UserInfo.SingleOrDefaultAsync(p => p.UserId == user.Id);
+                    var token = JWTGenarator.GenarateToken(user, userInfo);
+                    return Ok(token);
+                }
                 else
-                    return BadRequest(Enums.Errors.WhenLoginInvalidUserNameOrPassword.ToString());
+                    return BadRequest(IdentityEnums.Errors.WhenLoginInvalidUserNameOrPassword.ToString());
             }
             catch (Exception)
             {
@@ -100,7 +106,6 @@ namespace Identity.Controllers
                         result = await _userManager.CreateAsync(user, model.Password);
                         if (!result.Succeeded)
                             return BadRequest(result.ToErrorList());
-
                         _dbContext.Add(new UserInfo(user.Id, user.Email).SetDefaultAddress().SetName(model.Name));
                         await _dbContext.SaveChangesAsync();
                         transaction.Commit();
@@ -120,18 +125,25 @@ namespace Identity.Controllers
         }
 
         [HttpGet("users/{email}/confirmemail"), AllowAnonymous]
-        public async Task<IActionResult> GetUserEmailConfirmationToken(string email)
+        public async Task<IActionResult> GetUserEmailConfirmationToken(string email, string relativeUrl = "users/{0}/confirmemail?token={1}")
         {
             try
             {
-                var user = await _userManager.FindByEmailAsync(email.TrimAndToLower());
+                email = email.TrimAndToLower();
+                var user = await _userManager.FindByEmailAsync(email);
                 if (user.IsNull())
-                    return BadRequest(Enums.Errors.WhenConfirmEmailThatNotFound.ToString());
+                    return BadRequest(IdentityEnums.Errors.WhenConfirmEmailThatNotFound.ToString());
                 else if (user.EmailConfirmed)
-                    return BadRequest(Enums.Errors.WhenConfirmEmailThatAlreadyValidated.ToString());
+                    return BadRequest(IdentityEnums.Errors.WhenConfirmEmailThatAlreadyValidated.ToString());
 
                 var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                return Ok(token);
+
+                await _emailService.SendAsync(new EmailParam("Confirm Email By Amazon.com")
+                    .AddSendTo(email)
+                    .SetBody(
+                    EmailHelper.AddParagraph("Please Confirm your email by clicking fologing link"),
+                      EmailHelper.AddLink(string.Format(relativeUrl, email, token), "Click her")));
+                return Ok("token_sent");
             }
             catch (Exception)
             {
@@ -146,9 +158,9 @@ namespace Identity.Controllers
             {
                 var user = await _userManager.FindByEmailAsync(email);
                 if (user.IsNull())
-                    return BadRequest(Enums.Errors.WhenConfirmEmailThatNotFound.ToString());
+                    return BadRequest(IdentityEnums.Errors.WhenConfirmEmailThatNotFound.ToString());
                 else if (user.EmailConfirmed)
-                    return BadRequest(Enums.Errors.WhenConfirmEmailThatAlreadyValidated.ToString());
+                    return BadRequest(IdentityEnums.Errors.WhenConfirmEmailThatAlreadyValidated.ToString());
 
                 var result = await _userManager.ConfirmEmailAsync(user, token);
                 if (result.Succeeded)
@@ -169,7 +181,7 @@ namespace Identity.Controllers
             {
                 var user = await _userManager.FindByEmailAsync(model.Email);
                 if (user.IsNull())
-                    return BadRequest(Enums.Errors.WhenAuthorizationUserNotFound.ToString());
+                    return BadRequest(IdentityEnums.Errors.WhenAuthorizationUserNotFound.ToString());
                 var token = await _userManager.GeneratePasswordResetTokenAsync(user);
                 return Ok(token);
             }
@@ -186,7 +198,7 @@ namespace Identity.Controllers
             {
                 var user = await _userManager.FindByEmailAsync(model.Email);
                 if (user.IsNull())
-                    return BadRequest(Enums.Errors.WhenResetPasswordUserNorFound.ToString());
+                    return BadRequest(IdentityEnums.Errors.WhenResetPasswordUserNorFound.ToString());
 
                 var resetPassResult = await _userManager.ResetPasswordAsync(user, model.Token, model.Password);
                 if (!resetPassResult.Succeeded)
@@ -209,8 +221,8 @@ namespace Identity.Controllers
             {
                 var user = await _userManager.GetUserAsync(_user);
                 if (user.IsNull())
-                    return Unauthorized(Enums.Errors.WhenAuthorizationUserNotFound.ToString());
-                var result = await _userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
+                    return Unauthorized(IdentityEnums.Errors.WhenAuthorizationUserNotFound.ToString());
+                var result = await _userManager.ChangePasswordAsync(user, model.CurrentPassword ?? "", model.NewPassword ?? "");
                 if (result.Succeeded)
                     return Ok();
                 else
@@ -228,15 +240,37 @@ namespace Identity.Controllers
             try
             {
                 if (_user.IsNull())
-                    return Unauthorized(Enums.Errors.WhenAuthorizationUserNotFound.ToString());
+                    return Unauthorized(IdentityEnums.Errors.WhenAuthorizationUserNotFound.ToString());
                 var userid = _user.FindFirstValue(ClaimTypes.NameIdentifier);
                 if (userid.IsNull())
-                    return Unauthorized(Enums.Errors.WhenAuthorizationUserNotFound.ToString());
-                var userInfo = await _dbContext.UserInfo.SingleOrDefaultAsync(p => p.UserId == userid);
+                    return Unauthorized(IdentityEnums.Errors.WhenAuthorizationUserNotFound.ToString());
+                var userInfo = await _dbContext.UserInfo.AsNoTracking().SingleOrDefaultAsync(p => p.UserId == userid);
                 var userIdentity = await _userManager.GetUserAsync(_user);
                 if (userInfo.IsNull() || userIdentity.IsNull())
-                    return Unauthorized(Enums.Errors.WhenAuthorizationUserNotFound.ToString());
+                    return Unauthorized(IdentityEnums.Errors.WhenAuthorizationUserNotFound.ToString());
                 return Ok(new UserSettingViewModel(userIdentity, userInfo));
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        [HttpPost("users/myinfo"), Authorize]
+        public async Task<IActionResult> UpdateUserSettings([FromBody]UserSettingViewModel model)
+        {
+            try
+            {
+                if (_user.IsNull())
+                    return Unauthorized(IdentityEnums.Errors.WhenAuthorizationUserNotFound.ToString());
+                var userid = _user.FindFirstValue(ClaimTypes.NameIdentifier);
+                var userInfo = await _dbContext.UserInfo.AsTracking().SingleOrDefaultAsync(p => p.UserId == userid);
+                if (userInfo.IsNull())
+                    throw new NotFoundException($"User {userid} not found");
+
+                userInfo.UpdateInfo(new PersonName(model.FirstName, model.MiddleName, model.LastName), model.PhoneNumber,
+                    new Address(model.City, model.Street, model.Number));
+                await _dbContext.SaveChangesAsync();
+                return Ok();
             }
             catch (Exception)
             {

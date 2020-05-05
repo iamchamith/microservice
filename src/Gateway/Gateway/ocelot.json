@@ -2,8 +2,8 @@
   "ReRoutes": [
 
     {
-      "Key": "User",
-      "DownstreamPathTemplate": "/api/{everything}",
+      "Key": "Identity",
+      "DownstreamPathTemplate": "/api/identity/{everything}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {

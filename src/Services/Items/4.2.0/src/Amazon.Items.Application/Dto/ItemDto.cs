@@ -16,7 +16,7 @@ namespace Amazon.Items.Dto
 
         public ItemDto SetImageWithPath()
         {
-            Image = $"{GlobalConfig.Host}/{nameof(Item)}s/{Image}";
+            Image = $"{GlobalConfig.HostModules[App.SharedKernel.Model.Enums.Modules.Item]}/{nameof(Item)}s/{Image}";
             return this;
         }
     }

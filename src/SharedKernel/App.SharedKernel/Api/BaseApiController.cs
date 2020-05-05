@@ -2,7 +2,6 @@
 using App.SharedKernel.Model;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using System;
 using App.SharedKernel.Exception;
 using App.SharedKernel.Utilities;
 using System.Collections.Generic;

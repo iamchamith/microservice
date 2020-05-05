@@ -10,7 +10,7 @@ export default class HomeScreen extends BaseScreen {
         this._itemService = new ItemServices();
         this.state = {
             items: [],
-            isXhrCompleted:false
+            isXhrCompleted: false
         };
     }
     async componentDidMount() {
@@ -34,10 +34,11 @@ export default class HomeScreen extends BaseScreen {
                 <Item data={item} key={item.id} />
             </div>
         ));
-        return (<div className="container">
-            <ItemSearch />
-            {items}
-        </div>);
+        return (
+            <div className='row'>
+                <ItemSearch />
+                {items}
+            </div>);
     }
 }
 

@@ -9,18 +9,30 @@ using NETCore.MailKit.Infrastructure.Internal;
 using System;
 using Identity.Controllers;
 using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Microsoft.Extensions.Configuration;
+using App.SharedKernel.Messaging.Email;
 
 namespace Identity
 {
     public class Startup
     {
+        private readonly IConfiguration _configuration;
+        public Startup(IConfiguration configuration)
+        {
+            _configuration = configuration;
+            new IdentityGlobalConfig(configuration);
+        }
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<IdentityContext>(config =>
             {
-                config.UseSqlServer(GlobalConfig.ConnectionString);
+                config.UseSqlServer(IdentityGlobalConfig.ConnectionString);
             });
-            services.AddIdentity<IdentityUser, IdentityRole>(config=> {
+            services.AddIdentity<IdentityUser, IdentityRole>(config =>
+            {
                 config.Password.RequireDigit = false;
                 config.Password.RequiredLength = 2;
                 config.Password.RequireLowercase = false;
@@ -30,38 +42,30 @@ namespace Identity
                 .AddEntityFrameworkStores<IdentityContext>()
                 .AddDefaultTokenProviders();
 
-            services.ConfigureApplicationCookie(config =>
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+        .AddJwtBearer(options =>
+        {
+            options.TokenValidationParameters = new TokenValidationParameters
             {
-                config.Cookie.Name = "Identity.Cookie";
-                config.LoginPath = "/identity/login";
-                config.AccessDeniedPath = "/identity/login1";
-            });
-
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = _configuration["Jwt:Issuer"],
+                ValidAudience = _configuration["Jwt:Issuer"],
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]))
+            };
+        });
 
             services.AddMvc()
-        .AddMvcOptions(options => options.EnableEndpointRouting = false);
-            services.AddMailKit(optionBuilder =>
-            {
-                optionBuilder.UseMailKit(new MailKitOptions()
-                {
-       
-                    //Server = Configuration["Server"],
-                    //Port = Convert.ToInt32(Configuration["Port"]),
-                    //SenderName = Configuration["SenderName"],
-                    //SenderEmail = Configuration["SenderEmail"],
-                    
-                    //// can be optional with no authentication 
-                    //Account = Configuration["Account"],
-                    //Password = Configuration["Password"],
-                    // enable ssl or tls
-                    Security = true
-                });
-            });
+            .AddMvcOptions(options => options.EnableEndpointRouting = false);
+
             services.Configure<DataProtectionTokenProviderOptions>(o =>
                  o.TokenLifespan = TimeSpan.FromHours(3));
 
             services.AddTransient<IdentityContext, IdentityContext>()
-                .AddTransient<IdentityService, IdentityApiController>();
+                .AddTransient<IdentityService, IdentityApiController>()
+                          .AddTransient<IEmailService, EmailService>();
 
             services.AddSwaggerGen(c =>
             {
@@ -71,9 +75,24 @@ namespace Identity
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
-            {
                 app.UseDeveloperExceptionPage();
-            }
+
+            app.Use(async (ctx, next) =>
+            {
+                await next();
+                if (ctx.Response.StatusCode == 404 && !ctx.Response.HasStarted)
+                    ctx.Request.Path = "/error/404";
+                else if (ctx.Response.StatusCode == 500 && !ctx.Response.HasStarted)
+                    if (env.IsDevelopment())
+                        app.UseDeveloperExceptionPage();
+                    else
+                        ctx.Request.Path = "/error/500";
+                else if (ctx.Response.StatusCode == 403 && !ctx.Response.HasStarted)
+                    ctx.Request.Path = "/error/403";
+                await next();
+            });
+
+            app.UseStaticFiles();
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {

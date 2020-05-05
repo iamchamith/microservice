@@ -8,5 +8,13 @@
             Server,
             Web
         }
+
+        public enum Modules { 
+        
+            None,
+            Identity,
+            Item,
+            Order
+        }
     }
 }

@@ -34,9 +34,17 @@ namespace Identity.Model.Entities
             Address = new Address(DefaultString, DefaultString, DefaultString);
             return this;
         }
-        public UserInfo SetName(string name)
+        public UserInfo SetName(string fname)
         {
-            Name = new PersonName(DefaultString, DefaultString, DefaultString);
+            Name = new PersonName(fname, DefaultString, DefaultString);
+            return this;
+        }
+
+        public UserInfo UpdateInfo(PersonName name,string phone,Address address)
+        {
+            Name = name;
+            PhoneNumber = phone;
+            Address = address;
             return this;
         }
     }

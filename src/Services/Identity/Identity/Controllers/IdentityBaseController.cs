@@ -32,7 +32,7 @@ namespace Identity.Controllers
             var resultBad = actionResult as BadRequestObjectResult;
             if (!resultBad.IsNull())
             {
-                return (400, resultBad.Value);
+                return (400, resultBad.Value.ToJsonString());
             }
             var resultUnAuthorized = actionResult as UnauthorizedObjectResult;
             if (!resultUnAuthorized.IsNull())

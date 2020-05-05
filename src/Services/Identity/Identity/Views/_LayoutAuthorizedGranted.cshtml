@@ -1,69 +1,45 @@
 ﻿<!doctype html>
 <html lang="en" class="h-100">
 <head>
-    <title>Identity-Amazon</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Amazon.com</title>
+    <base href="/" />
+    <link rel="stylesheet" href="~/css/bootstrap/bootstrap.min.css" />
+    <link href="~/css/site.css" rel="stylesheet" />
 
-    <link rel="canonical" href="https://getbootstrap.com/docs/4.4/examples/sticky-footer-navbar/">
-
-    <!-- Bootstrap core CSS -->
-    <link href="https://getbootstrap.com/docs/4.4/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-
-    <link rel="apple-touch-icon" href="https://getbootstrap.com//docs/4.4/assets/img/favicons/apple-touch-icon.png" sizes="180x180">
-    <link rel="icon" href="https://getbootstrap.com//docs/4.4/assets/img/favicons/favicon-32x32.png" sizes="32x32" type="image/png">
-    <link rel="icon" href="https://getbootstrap.com//docs/4.4/assets/img/favicons/favicon-16x16.png" sizes="16x16" type="image/png">
-    <link rel="manifest" href="https://getbootstrap.com//docs/4.4/assets/img/favicons/manifest.json">
-    <link rel="mask-icon" href="https://getbootstrap.com//docs/4.4/assets/img/favicons/safari-pinned-tab.svg" color="#563d7c">
-    <link rel="icon" href="https://getbootstrap.com//docs/4.4/assets/img/favicons/favicon.ico">
-    <meta name="msapplication-config" content="https://getbootstrap.com//docs/4.4/assets/img/favicons/browserconfig.xml">
-    <style>
-        .bd-placeholder-img {
-            font-size: 1.125rem;
-            text-anchor: middle;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-        }
-
-        @@media (min-width: 768px) {
-            .bd-placeholder-img-lg {
-                font-size: 3.5rem;
-            }
-        }
-    </style>
-    <!-- Custom styles for this template -->
-    <link href="sticky-footer-navbar.css" rel="stylesheet">
 </head>
-<body class="d-flex flex-column h-100">
-    <header>
-        <!-- Fixed navbar -->
-        <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-            <a class="navbar-brand" href="#">Identity.Amazon.com</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarCollapse">
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item active">
-                        <a class="nav-link" href="/identity/usersettings">User Settings<span class="sr-only">(current)</span></a>
-                    </li>
-                    <li class="nav-item active">
-                        <a class="nav-link" href="/identity/changepassword">Change Password<span class="sr-only">(current)</span></a>
-                    </li>
-                    <li class="nav-item active">
-                        <a class="nav-link" href="/swagger">View Api<span class="sr-only">(current)</span></a>
-                    </li>
-                </ul>
-                <form class="form-inline mt-2 mt-md-0" action="/identity/logout">
-                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Logout</button>
-                </form>
+
+<body>
+    <app>
+        <div class="sidebar">
+            <div class="top-row pl-4 navbar navbar-dark">
+                <a class="navbar-brand" href>Amazon.com</a>
+                <button class="navbar-toggler">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
             </div>
-        </nav>
-    </header>
-    <main role="main" class="flex-shrink-0">
-        <div class="container" style="padding-top:75px">
-            @RenderBody()
+            @Html.Partial("_Shop")
+            @Html.Partial("_OrderNav")
+            @Html.Partial("_AccountNav")
         </div>
-    </main>
+
+        <div class="main">
+            <div class="top-row px-4">
+                <a href="/swagger" target="_blank">Api</a>
+            </div>
+
+            <div class="content px-4">
+                <div class="row">
+                    <div class="col-md-3 col-lg-2 col-sm-2"> </div>
+                    <div class="col-md-8 col-lg-8 col-sm-8">
+                        @RenderBody()
+                    </div>
+                    <div class="col-md-2 col-lg-2 col-sm-2"> </div>
+                </div>
+            </div>
+        </div>
+    </app>
+
 </body>
 </html>

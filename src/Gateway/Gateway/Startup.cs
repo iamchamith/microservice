@@ -31,7 +31,7 @@ namespace Gateway
             }
             else
             { 
-                app.UseHsts();
+                //app.UseHsts();
             }
 
             app.UseHttpsRedirection();

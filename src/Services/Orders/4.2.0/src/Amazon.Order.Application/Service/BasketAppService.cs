@@ -6,15 +6,18 @@ using System.Threading.Tasks;
 using App.SharedKernel.Extension;
 using System.Linq;
 using Amazon.Order.Interface;
+using RedisRepo;
 
 namespace Amazon.Order.Service
 {
     public class BasketAppService : OrderAppServiceBase, IBasketAppService
     {
         public string CacheKey { get; set; } = "basket_{0}";
-        public BasketAppService(IApplicationInjector coreInjector) : base(coreInjector)
+        private readonly RedisContext<BasketModel> _basketCacheContext;
+        public BasketAppService(IApplicationInjector coreInjector,
+            RedisContext<BasketModel> redisContext) : base(coreInjector)
         {
-
+            _basketCacheContext = redisContext;
         }
 
         private string GetCacheKey(int userid)
@@ -35,7 +38,7 @@ namespace Amazon.Order.Service
                 item.AddMoreItems(requestItem).CalculateTotalPrice();
 
             await ClearBusketByUserId(new Request<int>(request.UserId));
-            await Cache.SetAsync(GetCacheKey(request.UserId), result);
+           // await Cache.SetAsync(GetCacheKey(request.UserId), result);
 
         }
         public async Task RemoveBasket(Request<int> request)
@@ -44,7 +47,7 @@ namespace Amazon.Order.Service
             result.RemoveAll(p => p.ItemId == request.Item);
 
             await ClearBusketByUserId(new Request<int>(request.UserId));
-            await Cache.SetAsync(GetCacheKey(request.UserId), result);
+          //  await Cache.SetAsync(GetCacheKey(request.UserId), result);
 
         }
         public async Task UpdateBasket(Request<BasketModel> request)
@@ -55,18 +58,32 @@ namespace Amazon.Order.Service
                 item.Update(request.Item.Quantity);
 
             await ClearBusketByUserId(new Request<int>(request.UserId));
-            await Cache.SetAsync(GetCacheKey(request.UserId), result);
+          //  await Cache.SetAsync(GetCacheKey(request.UserId), result);
         }
         public async Task ClearBusketByUserId(Request<int> request)
         {
-            await Cache.RemoveAsync(GetCacheKey(request.UserId));
+            //await _basketCacheContext.Delete()
         }
         public async Task<Response<List<BasketModel>>> ReadItemsByUserId(Request<int> request)
         {
-            var result = await base.Cache.GetOrDefaultAsync(GetCacheKey(request.UserId))
-                as List<BasketModel>;
-            return Response(result.IsNullOrZero() ? new List<BasketModel>() : result);
+            try
+            {
+                SetCacheTableByUser(request);
+                var result = await _basketCacheContext.Get();
+                var fresult = result.Item1 ? result.Item2 : new List<BasketModel>();
+                return Response(fresult);
+            }
+            catch (System.Exception e)
+            {
+                throw;
+            }
         }
 
+        string SetCacheTableByUser<T>(Request<T> request)
+        {
+            var tableName = $"basket_{request.UserId}";
+            _basketCacheContext.SetDatabase(tableName);
+            return tableName;
+        }
     }
 }
