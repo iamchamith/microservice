@@ -1,0 +1,10 @@
+﻿@model ViewMessage
+@if (Model.IsSuccess.HasValue)
+{
+    var css = Model.IsSuccess.Value ? "alert-success" : "alert-danger";
+    <div class="alert @css" role="alert">@Html.Raw(Model.Message)</div>
+}
+else
+{
+    <div></div>
+}

@@ -1,6 +1,6 @@
 ﻿using Abp.Application.Services.Dto;
 using App.SharedKernel.ValueObjects;
-using static Amazon.Order.Utilities.Enums;
+using static Amazon.Order.OrderEnums;
 
 namespace Amazon.Order.Dto
 {

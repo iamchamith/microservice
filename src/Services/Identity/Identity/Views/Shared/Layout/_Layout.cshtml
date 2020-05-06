@@ -19,16 +19,12 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
             </div>
-            @Html.Partial("_Shop")
-            @Html.Partial("_OrderNav")
-            @Html.Partial("_AccountNav")
+            @await Html.PartialAsync(MvcHelper.GetComponentPath("menu","_shop"))
         </div>
 
         <div class="main">
-            <div class="top-row px-4">
-                <a href="/swagger" target="_blank">Api</a>
+            <div class="top-row px-4"> 
             </div>
-
             <div class="content px-4">
                 <div class="row">
                     <div class="col-md-3 col-lg-2 col-sm-2"> </div>

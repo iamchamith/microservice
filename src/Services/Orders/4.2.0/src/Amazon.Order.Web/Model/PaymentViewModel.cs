@@ -1,6 +1,6 @@
 ﻿using App.SharedKernel.Model;
 using System;
-using static Amazon.Order.Utilities.Enums;
+using static Amazon.Order.OrderEnums;
 
 namespace Amazon.Order.Web.Model
 {

@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Abp.TestBase;
 using Amazon.Items.EntityFrameworkCore;
 using Amazon.Items.Tests.TestDatas;
+using Amazon.Items.Web.Startup.Config;
 
 namespace Amazon.Items.Tests
 {
@@ -10,7 +11,11 @@ namespace Amazon.Items.Tests
     {
         public ItemsTestBase()
         {
-            UsingDbContext(context => new TestDataBuilder(context).Build());
+            ResolveIoc();
+        }
+
+        public void ResolveIoc() {
+            LocalIocManager.RegisterIoc();
         }
 
         protected virtual void UsingDbContext(Action<ItemsDbContext> action)
@@ -25,7 +30,6 @@ namespace Amazon.Items.Tests
         protected virtual T UsingDbContext<T>(Func<ItemsDbContext, T> func)
         {
             T result;
-
             using (var context = LocalIocManager.Resolve<ItemsDbContext>())
             {
                 result = func(context);

@@ -1,6 +1,8 @@
-﻿namespace Amazon.Order.Utilities
+﻿using App.SharedKernel.Model;
+
+namespace Amazon.Order
 {
-    public class Enums
+    public class OrderEnums : Enums
     {
         public enum ShippingProgress
         {
@@ -9,7 +11,6 @@
             Processing = 3,
             Complete = 4
         }
-
         public enum PaymentDoneBy
         {
             Cash = 1,

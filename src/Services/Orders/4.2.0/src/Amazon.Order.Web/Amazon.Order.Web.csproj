@@ -12,6 +12,12 @@
     <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="ClientApp\**" />
+    <Content Remove="ClientApp\**" />
+    <EmbeddedResource Remove="ClientApp\**" />
+    <None Remove="ClientApp\**" />
+  </ItemGroup>
+  <ItemGroup>
     <None Include="app.config" />
     <None Update="log4net.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -26,6 +32,8 @@
     <ProjectReference Include="..\Amazon.Order.EntityFrameworkCore\Amazon.Order.EntityFrameworkCore.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.SpaServices" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="2.2.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.0.0" />
     <PackageReference Include="System.Net.Primitives" Version="4.3.1" />
     <PackageReference Include="System.Net.NameResolution" Version="4.3.0" />

@@ -6,7 +6,7 @@ import LeftNav from '../components/LeftNav/LeftNav';
 export default props => (
     <React.Fragment>
         <LeftNav />
-        <div class="main" >
+        <div class="main">
             <div className="top-row px-4">
                 <Header />
             </div>

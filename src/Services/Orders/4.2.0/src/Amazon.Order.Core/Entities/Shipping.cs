@@ -5,7 +5,7 @@ using App.SharedKernel.Utilities;
 using App.SharedKernel.ValueObjects;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using static Amazon.Order.Utilities.Enums;
+using static Amazon.Order.OrderEnums;
 
 namespace Amazon.Order.Entities
 {

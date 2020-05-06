@@ -1,16 +1,13 @@
 ﻿@{
     ViewData["Title"] = "ConfirmEmail";
-    Layout = "~/Views/_Layout.cshtml";
-    string message = (string)ViewData["message"] ?? "";
+    Layout = AppConst.DEFAULT_LAYOUT;
 }
 <div class="row">
     <div class="col-md-12 col-lg-12 col-sm-12">
         <form class="form-signin" method="post" action="/identity/sendemailconfirmation">
             <h3>Confirm Email</h3>
-            <p>
-                @message.
-                <a href="/identity/login">Please login to the system.</a>
-            </p>
+            @await Html.PartialAsync(MvcHelper.GetComponentPath("notification", "_Notification"), ViewData["message"].ToViewMessage())
+            <a asp-action="login" asp-controller="identity">To login</a>
         </form>
     </div>
 </div>

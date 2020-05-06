@@ -1,4 +1,3 @@
-using System.Reflection;
 using Abp.Modules;
 using Abp.Reflection.Extensions;
 using Abp.TestBase;
@@ -19,7 +18,7 @@ namespace Amazon.Items.Tests
     {
         public override void PreInitialize()
         {
-            Configuration.UnitOfWork.IsTransactional = false; //EF Core InMemory DB does not support transactions.
+            Configuration.UnitOfWork.IsTransactional = false; 
             SetupInMemoryDb();
         }
 

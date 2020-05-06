@@ -19,7 +19,7 @@ namespace App.SharedKernel.Messaging.Email
                 var subject = model.Subject;
                 var htmlContent = model.Body;
                 var msg = MailHelper.CreateSingleEmailToMultipleRecipients(from, tos, subject, "", htmlContent, false);
-                await client.SendEmailAsync(msg);
+                var result = await client.SendEmailAsync(msg);
             }
             catch (System.Exception e)
             {

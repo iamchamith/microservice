@@ -15,6 +15,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using App.SharedKernel.Messaging.Email;
+using App.SharedKernel;
+
 namespace Identity.Controllers
 {
     [Route("api/identity")]
@@ -125,7 +127,7 @@ namespace Identity.Controllers
         }
 
         [HttpGet("users/{email}/confirmemail"), AllowAnonymous]
-        public async Task<IActionResult> GetUserEmailConfirmationToken(string email, string relativeUrl = "users/{0}/confirmemail?token={1}")
+        public async Task<IActionResult> GetUserEmailConfirmationToken(string email, string callback = "{0}users/{1}/confirmemail?token={2}")
         {
             try
             {
@@ -142,7 +144,8 @@ namespace Identity.Controllers
                     .AddSendTo(email)
                     .SetBody(
                     EmailHelper.AddParagraph("Please Confirm your email by clicking fologing link"),
-                      EmailHelper.AddLink(string.Format(relativeUrl, email, token), "Click her")));
+                      EmailHelper.AddLink(string.Format(callback, GlobalConfig.HostModules[App.SharedKernel.Model.Enums.Modules.Identity]
+                      , email, token), "Click her")));
                 return Ok("token_sent");
             }
             catch (Exception)
@@ -181,8 +184,15 @@ namespace Identity.Controllers
             {
                 var user = await _userManager.FindByEmailAsync(model.Email);
                 if (user.IsNull())
-                    return BadRequest(IdentityEnums.Errors.WhenAuthorizationUserNotFound.ToString());
+                    return BadRequest(IdentityEnums.Errors.WhenResetPasswordUserNorFound.ToString());
                 var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+                await _emailService.SendAsync(new EmailParam("Reset password Amazon.com")
+                 .AddSendTo(model.Email)
+                 .SetBody(
+                 EmailHelper.AddParagraph("Please click below link for reset password."),
+                   EmailHelper.AddLink(string.Format(model.CallbackUrl, GlobalConfig.HostModules[App.SharedKernel.Model.Enums.Modules.Identity]
+                   , model.Email, token), "Click her")));
                 return Ok(token);
             }
             catch (Exception)
@@ -191,7 +201,7 @@ namespace Identity.Controllers
             }
         }
 
-        [HttpPost("users/password/reset"), AllowAnonymous]
+        [HttpPost("users/password/reset"), AllowAnonymous]  
         public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordViewModel model)
         {
             try
@@ -202,9 +212,7 @@ namespace Identity.Controllers
 
                 var resetPassResult = await _userManager.ResetPasswordAsync(user, model.Token, model.Password);
                 if (!resetPassResult.Succeeded)
-                {
                     return BadRequest(resetPassResult.ToErrorList());
-                }
                 return Ok();
             }
             catch (Exception)
@@ -276,6 +284,23 @@ namespace Identity.Controllers
             {
                 throw;
             }
+        }
+        [HttpGet("test/email")]
+        public async Task<IActionResult> SendTestEmail(string email)
+        {
+            try
+            {
+                await _emailService.SendAsync(new EmailParam("Confirm Email By Amazon.com")
+          .AddSendTo(email)
+          .SetBody(
+          EmailHelper.AddParagraph("Please Confirm your email by clicking fologing link")));
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
+
         }
     }
 }

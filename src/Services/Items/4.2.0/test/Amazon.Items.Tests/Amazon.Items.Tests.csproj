@@ -15,6 +15,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\Amazon.Items.Application\Amazon.Items.Application.csproj" />
     <ProjectReference Include="..\..\src\Amazon.Items.EntityFrameworkCore\Amazon.Items.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\..\src\Amazon.Items.Web\Amazon.Items.Web.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Castle.Core" Version="4.4.0" />
@@ -31,5 +32,13 @@
     <PackageReference Include="Castle.Windsor.MsDependencyInjection" Version="3.3.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="2.2.4" />
     <PackageReference Include="Microsoft.DotNet.InternalAbstractions" Version="1.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Domain\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="App.SharedKernel">
+      <HintPath>..\..\..\..\..\SharedKernel\App.SharedKernel\bin\Debug\netcoreapp2.2\App.SharedKernel.dll</HintPath>
+    </Reference>
   </ItemGroup>
 </Project>

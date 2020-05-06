@@ -1,4 +1,5 @@
 ﻿using App.SharedKernel.Extension;
+using Identity.Utility;
 using Microsoft.AspNetCore.Mvc;
 using System;
 
@@ -41,10 +42,11 @@ namespace Identity.Controllers
             }
             return (500, resultBad.Value);
         }
-        [HttpGet]
-        public IActionResult _401()
+
+
+        protected void SetViewMessage(bool successMessage, string message)
         {
-            return View("_401");
+            ViewData["message"] = new ViewMessage(successMessage, message);
         }
     }
 }

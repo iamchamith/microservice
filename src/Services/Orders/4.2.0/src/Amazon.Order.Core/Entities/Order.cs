@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
-using static Amazon.Order.Utilities.Enums;
+using static Amazon.Order.OrderEnums;
 
 namespace Amazon.Order.Entities
 {

@@ -7,9 +7,7 @@
     <base href="/" />
     <link rel="stylesheet" href="~/css/bootstrap/bootstrap.min.css" />
     <link href="~/css/site.css" rel="stylesheet" />
-
 </head>
-
 <body>
     <app>
         <div class="sidebar">
@@ -19,13 +17,15 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
             </div>
-            @Html.Partial("_Shop")
+            @await Html.PartialAsync(MvcHelper.GetComponentPath("menu", "_shop"))
+            @await Html.PartialAsync(MvcHelper.GetComponentPath("menu", "_OrderNav"))
+            @await Html.PartialAsync(MvcHelper.GetComponentPath("menu", "_AccountNav"))
         </div>
 
         <div class="main">
             <div class="top-row px-4">
-                <a href="/swagger" target="_blank">Api</a>
             </div>
+
             <div class="content px-4">
                 <div class="row">
                     <div class="col-md-3 col-lg-2 col-sm-2"> </div>

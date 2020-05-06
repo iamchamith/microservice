@@ -1,27 +1,20 @@
 ﻿@model string
 @{
-    ViewData["Title"] = "SendEmailConfirmation";
-    Layout = "~/Views/_Layout.cshtml";
-    string message = (string)ViewData["message"] ?? "";
-    string token = (string)ViewData["token"] ?? "";
+    ViewData["Title"] = "Send Email Confirmation";
+    Layout = AppConst.DEFAULT_LAYOUT;
 }
 <div class="row">
     <div class="col-md-12 col-lg-12 col-sm-12">
-        <form class="form-signin" method="post" action="/identity/sendemailconfirmation">
+        <form class="form-signin" method="post" asp-controller="identity" asp-action="sendemailconfirmation">
             <h1 class="h3 mb-3 font-weight-normal">Send Email Confirmation</h1>
-            <label for="inputEmail" class="sr-only">Email address</label>
+            <label for="inputEmail">Email address</label>
+            <br />
             <input type="email" id="Email" name="Email" class="form-control" placeholder="Email address" required autofocus value="@Model" />
+            <br />
             <button class="btn btn-lg btn-primary btn-block" type="submit">Send</button>
             <br />
             <a href="/identity/login">Go to login</a>
-            @if (!string.IsNullOrEmpty(message))
-            {
-                <div class="alert alert-danger" role="alert">@message</div>
-            }
-            @if (!string.IsNullOrEmpty(token))
-            {
-                <a href="@token">Email Confirmation callback</a>
-            }
+            @await Html.PartialAsync(MvcHelper.GetComponentPath("notification", "_Notification"), ViewData["message"].ToViewMessage())
         </form>
     </div>
 </div>

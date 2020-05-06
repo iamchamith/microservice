@@ -59,9 +59,9 @@ namespace Amazon.Items.Service
                     });
                     return PageResponse(dtos, count, request.Item);
                 }
-                catch (System.Exception)
+                catch (System.Exception e)
                 {
-                    throw;
+                    throw e;
                 }
             }
             public async Task<Response<ItemDto>> GetItemById(Request<int> request)
@@ -72,9 +72,9 @@ namespace Amazon.Items.Service
                         .ThrowExceptionIfNull();
                     return Response(Mapper.Map<ItemDto>(item).SetImageWithPath());
                 }
-                catch (System.Exception)
+                catch (System.Exception e)
                 {
-                    throw;
+                    throw e;
                 }
             }
         }
