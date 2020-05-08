@@ -52,6 +52,7 @@ namespace Identity.Controllers
         {
             try
             {
+                throw new Exception("db fail");
                 var user = await _userManager.FindByEmailAsync(model.Email);
                 if (user.IsNull())
                     return BadRequest(IdentityEnums.Errors.WhenLoginUserCannotFind.ToString());
@@ -280,7 +281,7 @@ namespace Identity.Controllers
                 await _dbContext.SaveChangesAsync();
                 return Ok();
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 throw;
             }
@@ -301,6 +302,11 @@ namespace Identity.Controllers
                 throw;
             }
 
+        }
+        [HttpGet("test/loggs")]
+        public async Task<IActionResult> NLoggerTest() {
+
+            throw new Exception("something went wrong");
         }
     }
 }

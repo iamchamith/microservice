@@ -76,20 +76,24 @@ namespace Identity
         {
             if (env.IsDevelopment())
                 app.UseDeveloperExceptionPage();
-
-            app.Use(async (ctx, next) =>
+            else
             {
-                if (ctx.Response.StatusCode == 404 && !ctx.Response.HasStarted)
-                    ctx.Request.Path = "/error/_404";
-                else if (ctx.Response.StatusCode == 500 && !ctx.Response.HasStarted)
-                    if (env.IsDevelopment())
-                        app.UseDeveloperExceptionPage();
-                    else
-                        ctx.Request.Path = "/error/_500";
-                else if (ctx.Response.StatusCode == 403 && !ctx.Response.HasStarted)
-                    ctx.Request.Path = "/error/_403";
-                await next();
-            });
+                app.UseExceptionHandler("/Error/_500");
+            }
+
+            //app.Use(async (ctx, next) =>
+            //{
+            //    if (ctx.Response.StatusCode == 404 && !ctx.Response.HasStarted)
+            //        ctx.Request.Path = "/error/_404";
+            //    else if (ctx.Response.StatusCode == 500 && !ctx.Response.HasStarted)
+            //        if (env.IsDevelopment())
+            //            app.UseDeveloperExceptionPage();
+            //        else
+            //            ctx.Request.Path = "/error/_500";
+            //    else if (ctx.Response.StatusCode == 403 && !ctx.Response.HasStarted)
+            //        ctx.Request.Path = "/error/_403";
+            //    await next();
+            //});
 
             app.UseStaticFiles();
             app.UseSwagger();

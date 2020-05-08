@@ -1,15 +1,15 @@
 ﻿@model Identity.Model.ViewModel.UserSettingViewModel
 
 @{
-    ViewData["Title"] = "UserSettings";
+    ViewData["Title"] = "User Settings";
     Layout = AppConst.AUTHORIZED_LAYOUT;
 }
 <div class="row">
     <div class="col-md-12 col-lg-12 col-sm-12">
         <h1>User Settings</h1>
         <hr />
-        <form action="UserSettings" method="put">
-            <h3>Name</h3>
+        <form asp-action="UserSettings" asp-controller="Identity" method="put">
+            <label class="control-label"><b>Name</b></label>
             <div class="row">
                 <div class="col-md-4">
                     <div class="form-group">
@@ -32,14 +32,14 @@
             </div>
             <div class="form-group">
                 <label asp-for="Email" class="control-label">Email</label>
-                <input type="email" class="form-control" value="@Model.Email" />
+                <input type="email" class="form-control" value="@Model.Email" disabled />
             </div>
             <div class="form-group">
                 <label asp-for="PhoneNumber" class="control-label">Phone Number</label>
                 <input type="tel" class="form-control" value="@Model.PhoneNumber" />
             </div>
             <hr />
-            <h3>Address</h3>
+            <label class="control-label"><b>Address</b></label>
             <div class="row">
                 <div class="col-md-4">
                     <div class="form-group">
@@ -68,6 +68,8 @@
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
+            @await Html.PartialAsync(MvcHelper.GetComponentPath("notification", "_Notification"), ViewData["message"].ToViewMessage())
+
         </form>
     </div>
 </div>

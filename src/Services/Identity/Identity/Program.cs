@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using NLog.Extensions.Logging;
 
 namespace Identity
 {
@@ -12,6 +13,9 @@ namespace Identity
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>();
+            .ConfigureLogging((hostingContext, loggin) =>
+            {
+                loggin.AddNLog();
+            }).UseStartup<Startup>();
     }
 }

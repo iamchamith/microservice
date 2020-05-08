@@ -189,8 +189,14 @@ namespace Identity.Controllers
         [HttpPut, Authorize]
         public async Task<IActionResult> UserSettings([FromForm]UserSettingViewModel model)
         {
+            if (!ModelState.IsValid)
+                return View(model);
             var result = ActionResultFilter(await _identityService.SetHttpContext(HttpContext).UpdateUserSettings(model));
-            return View();
+            if (result.Item1.IsOk())
+                SetViewMessage(true, "Update success.");
+            else
+                SetViewMessage(false,result.Item1.ToString());
+                return View(model);
         }
         #endregion
 

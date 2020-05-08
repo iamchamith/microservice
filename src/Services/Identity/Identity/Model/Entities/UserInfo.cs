@@ -21,7 +21,7 @@ namespace Identity.Model.Entities
         [ForeignKey(nameof(UserId))]
         public virtual IdentityUser IdentityUser { get; set; }
 
-        public const string DefaultString = "-";
+        public const string DefaultString = "";
         public UserInfo()
         {
         }

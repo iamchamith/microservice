@@ -14,7 +14,7 @@ namespace Identity.Model.ViewModel
         public string FirstName { get; set; }
         [StringLength(DataAnnotationsConst.NAME_LENGTH), DataType(DataType.Text)]
         public string MiddleName { get; set; }
-        [Required,StringLength(DataAnnotationsConst.NAME_LENGTH), DataType(DataType.Text)]
+        [Required, StringLength(DataAnnotationsConst.NAME_LENGTH), DataType(DataType.Text)]
         public string LastName { get; set; }
 
         [Required, StringLength(DataAnnotationsConst.NAME_LENGTH), DataType(DataType.Text)]
@@ -24,7 +24,8 @@ namespace Identity.Model.ViewModel
         [Required, StringLength(DataAnnotationsConst.NAME_LENGTH), DataType(DataType.Text)]
         public string City { get; set; }
 
-        [Required, StringLength(DataAnnotationsConst.EMAIL_LENGTH), DataType(DataType.EmailAddress)]
+        [Required, StringLength(DataAnnotationsConst.EMAIL_LENGTH), DataType(DataType.EmailAddress),
+            RegularExpression(DataAnnotationsConst.EMAIL_REGEX)]
         public string Email { get; set; }
         [Required, StringLength(DataAnnotationsConst.PHONE_LENGTH), DataType(DataType.PhoneNumber)]
         public string PhoneNumber { get; set; }

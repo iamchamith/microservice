@@ -18,7 +18,71 @@
     <None Remove="ClientApp\**" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="ClientApp\package-lock.json" />
+    <Content Include="ClientApp\package.json" />
+    <Content Include="ClientApp\public\css\bootstrap\bootstrap.min.css" />
+    <Content Include="ClientApp\public\css\htmlpage.html" />
+    <Content Include="ClientApp\public\css\open-iconic\font\css\open-iconic-bootstrap.min.css" />
+    <Content Include="ClientApp\public\css\open-iconic\font\fonts\open-iconic.eot" />
+    <Content Include="ClientApp\public\css\open-iconic\font\fonts\open-iconic.otf" />
+    <Content Include="ClientApp\public\css\open-iconic\font\fonts\open-iconic.ttf" />
+    <Content Include="ClientApp\public\css\open-iconic\font\fonts\open-iconic.woff" />
+    <Content Include="ClientApp\public\css\site.css" />
+    <Content Include="ClientApp\public\favicon.ico" />
+    <Content Include="ClientApp\public\index.html" />
+    <Content Include="ClientApp\public\manifest.json" />
+    <Content Include="ClientApp\src\components\CartItem\CartItem.css" />
+    <Content Include="ClientApp\src\components\Header\Header.css" />
+    <Content Include="ClientApp\src\components\Item\Item.css" />
+    <Content Include="ClientApp\src\components\LeftNav\Nav.css" />
+    <Content Include="ClientApp\src\screens\css\ItemInfoScreen.css" />
+  </ItemGroup>
+  <ItemGroup>
     <None Include="app.config" />
+    <None Include="ClientApp\.gitignore" />
+    <None Include="ClientApp\public\css\bootstrap\bootstrap.min.css.map" />
+    <None Include="ClientApp\public\css\open-iconic\FONT-LICENSE" />
+    <None Include="ClientApp\public\css\open-iconic\font\fonts\open-iconic.svg" />
+    <None Include="ClientApp\public\css\open-iconic\ICON-LICENSE" />
+    <None Include="ClientApp\public\css\open-iconic\README.md" />
+    <None Include="ClientApp\README.md" />
+    <None Include="ClientApp\src\App.js" />
+    <None Include="ClientApp\src\App.test.js" />
+    <None Include="ClientApp\src\components\CartItem\CartItem.js" />
+    <None Include="ClientApp\src\components\CartItem\index.js" />
+    <None Include="ClientApp\src\components\CartSummary\CartSummary.js" />
+    <None Include="ClientApp\src\components\CartSummary\index.js" />
+    <None Include="ClientApp\src\components\Footer\Footer.js" />
+    <None Include="ClientApp\src\components\Footer\index.js" />
+    <None Include="ClientApp\src\components\Header\Header.js" />
+    <None Include="ClientApp\src\components\Header\index.js" />
+    <None Include="ClientApp\src\components\ItemSearch\index.js" />
+    <None Include="ClientApp\src\components\ItemSearch\ItemSearch.js" />
+    <None Include="ClientApp\src\components\Item\index.js" />
+    <None Include="ClientApp\src\components\Item\Item.js" />
+    <None Include="ClientApp\src\components\LeftNav\index.js" />
+    <None Include="ClientApp\src\components\LeftNav\LeftNav.js" />
+    <None Include="ClientApp\src\components\Toolbox\_Dropdown.js" />
+    <None Include="ClientApp\src\components\Toolbox\_Text.js" />
+    <None Include="ClientApp\src\components\Utility\index.js" />
+    <None Include="ClientApp\src\components\Utility\UtilityComponent.js" />
+    <None Include="ClientApp\src\GlobalConfig.js" />
+    <None Include="ClientApp\src\index.js" />
+    <None Include="ClientApp\src\registerServiceWorker.js" />
+    <None Include="ClientApp\src\screens\BaseScreen.js" />
+    <None Include="ClientApp\src\screens\CartScreen.js" />
+    <None Include="ClientApp\src\screens\HomeScreen.js" />
+    <None Include="ClientApp\src\screens\ItemInfoScreen.js" />
+    <None Include="ClientApp\src\screens\Layout.js" />
+    <None Include="ClientApp\src\serviceRepository\BaseService.js" />
+    <None Include="ClientApp\src\serviceRepository\HttpRepository.js" />
+    <None Include="ClientApp\src\serviceRepository\ItemServices.js" />
+    <None Include="ClientApp\src\serviceRepository\Request.js" />
+    <None Include="ClientApp\src\store\configureStore.js" />
+    <None Include="ClientApp\src\store\Counter.js" />
+    <None Include="ClientApp\src\store\WeatherForecasts.js" />
+    <None Include="ClientApp\src\utility\Extensions.js" />
+    <None Include="ClientApp\src\utility\Notifications.js" />
     <None Update="log4net.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
