@@ -4,8 +4,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using NETCore.MailKit.Extensions;
-using NETCore.MailKit.Infrastructure.Internal;
 using System;
 using Identity.Controllers;
 using Microsoft.OpenApi.Models;
@@ -30,6 +28,12 @@ namespace Identity
             services.AddDbContext<IdentityContext>(config =>
             {
                 config.UseSqlServer(IdentityGlobalConfig.ConnectionString);
+            });
+            services.ConfigureApplicationCookie(config =>
+            {
+                config.Cookie.Name = "Identity.Cookie";
+                config.LoginPath = "/identity/login";
+                config.AccessDeniedPath = "/identity/login1";
             });
             services.AddIdentity<IdentityUser, IdentityRole>(config =>
             {
@@ -106,7 +110,7 @@ namespace Identity
             {
                 routes.MapRoute(
                 name: "default",
-                template: "{controller=identity}/{action=login}/{id?}");
+                template: "identity/{controller=identity}/{action=login}/{id?}");
             });
         }
     }

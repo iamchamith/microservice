@@ -16,6 +16,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using App.SharedKernel.Messaging.Email;
 using App.SharedKernel;
+using System.Collections.Generic;
+using IdentityServer4.Extensions;
 
 namespace Identity.Controllers
 {
@@ -52,7 +54,6 @@ namespace Identity.Controllers
         {
             try
             {
-                throw new Exception("db fail");
                 var user = await _userManager.FindByEmailAsync(model.Email);
                 if (user.IsNull())
                     return BadRequest(IdentityEnums.Errors.WhenLoginUserCannotFind.ToString());
@@ -202,7 +203,7 @@ namespace Identity.Controllers
             }
         }
 
-        [HttpPost("users/password/reset"), AllowAnonymous]  
+        [HttpPost("users/password/reset"), AllowAnonymous]
         public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordViewModel model)
         {
             try
@@ -264,6 +265,7 @@ namespace Identity.Controllers
                 throw;
             }
         }
+
         [HttpPost("users/myinfo"), Authorize]
         public async Task<IActionResult> UpdateUserSettings([FromBody]UserSettingViewModel model)
         {
@@ -286,6 +288,25 @@ namespace Identity.Controllers
                 throw;
             }
         }
+        [HttpGet("users/authorized")]
+        public IActionResult IsAuthorized()
+        {
+            return Ok(User.IsAuthenticated() ? true : false);
+        }
+
+        [HttpGet("utilities/messages/errors")]
+        public IActionResult Messages()
+        {
+            var result = new List<KeyValuePair<int, string>>();
+            foreach (IdentityEnums.Errors name in Enum.GetValues(typeof(IdentityEnums.Errors)))
+            {
+                result.Add(new KeyValuePair<int, string>((int)name, name.ToString()));
+            }
+            return Ok(result);
+        }
+
+        #region test
+
         [HttpGet("test/email")]
         public async Task<IActionResult> SendTestEmail(string email)
         {
@@ -303,10 +324,19 @@ namespace Identity.Controllers
             }
 
         }
+
         [HttpGet("test/loggs")]
-        public async Task<IActionResult> NLoggerTest() {
+        public async Task<IActionResult> NLoggerTest()
+        {
 
             throw new Exception("something went wrong");
         }
+
+        [HttpGet("test/ping")]
+        public async Task<IActionResult> Ping()
+        {
+            return Ok("Pong");
+        }
+        #endregion
     }
 }

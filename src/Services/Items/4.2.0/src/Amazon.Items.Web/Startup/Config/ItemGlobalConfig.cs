@@ -8,7 +8,7 @@ namespace Amazon.Items.Web.Startup.Config
     {
         public ItemGlobalConfig(IConfiguration config)
         {
-            ConnectionString = config[nameof(ConnectionString)];
+            ConnectionString = "Data Source=DESKTOP-LE44UH9;Initial Catalog=Amazon;Integrated Security=True";
            
             HostModules = new System.Collections.Generic.Dictionary<ItemEnums.Modules, string>() {
                 {ItemEnums.Modules.Identity,config[$"{nameof(HostModules)}:{nameof(ItemEnums.Modules.Identity)}"] },

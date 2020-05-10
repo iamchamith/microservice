@@ -2,6 +2,7 @@
 using App.SharedKernel.Messaging.Email;
 using Identity.Utility;
 using Microsoft.Extensions.Configuration;
+using App.SharedKernel.Model;
 namespace Identity
 {
     public class IdentityGlobalConfig : GlobalConfig
@@ -14,10 +15,11 @@ namespace Identity
                 Issue = config[$"{nameof(Jwt)}:{nameof(JwtModel.Issue)}"],
                 Key = config[$"{nameof(Jwt)}:{nameof(JwtModel.Key)}"]
             };
-            HostModules = new System.Collections.Generic.Dictionary<IdentityEnums.Modules, string>() {
-                {IdentityEnums.Modules.Identity,config[$"{nameof(HostModules)}:{nameof(IdentityEnums.Modules.Identity)}"] },
-                 {IdentityEnums.Modules.Item,config[$"{nameof(HostModules)}:{nameof(IdentityEnums.Modules.Item)}"] },
-                  {IdentityEnums.Modules.Order,config[$"{nameof(HostModules)}:{nameof(IdentityEnums.Modules.Order)}"] }
+            HostModules = new System.Collections.Generic.Dictionary<Enums.Modules, string>() {
+               {Enums.Modules.Gateway,config[$"{nameof(HostModules)}:{nameof(Enums.Modules.Gateway)}"] },
+                {Enums.Modules.Identity,config[$"{nameof(HostModules)}:{nameof(Enums.Modules.Identity)}"] },
+                 {Enums.Modules.Item,config[$"{nameof(HostModules)}:{nameof(Enums.Modules.Item)}"] },
+                  {Enums.Modules.Order,config[$"{nameof(HostModules)}:{nameof(Enums.Modules.Order)}"] }
             };
             EmailConfig = new EmailConfig(config["Email:ApiKey"], config["Email:FromEmail"], config["Email:FromName"]);
         }

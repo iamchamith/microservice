@@ -28,9 +28,6 @@ export default class Header extends React.Component {
                         <Collapse className="d-sm-inline-flex flex-sm-row-reverse" isOpen={this.state.isOpen} navbar>
                             <ul className="navbar-nav flex-grow">
                                 <CartSummary />
-                                <NavItem>
-                                    <NavLink tag={Link} className="text-dark" to="/counter">Login</NavLink>
-                                </NavItem>
                             </ul>
                         </Collapse>
                     </Container>

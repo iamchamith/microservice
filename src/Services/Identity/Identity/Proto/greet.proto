@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+option csharp_namespace = "GrpcService";
+
+package greet;
+
+
+service TriggerUserUpdate {
+
+  rpc UpdateUser (Request) returns (Response);
+}
+message Request {
+  int32 UserId = 1;
+  PersonName Name=2;
+  PersonAddress Address=3;
+  string PhoneNumber=4;
+  string Email=5;
+}
+
+message PersonName{
+  string FirstName = 1;
+  string MiddleName = 2;
+  string LastName=3;
+}
+
+message PersonAddress{
+  string Number=1;
+  string Street=2;
+  string City=3;
+}
+
+message Response {
+  int32 Code=1,
+  string message = 2;
+}

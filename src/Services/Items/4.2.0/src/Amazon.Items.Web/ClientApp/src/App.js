@@ -6,8 +6,8 @@ import ItemInfoScreen from './screens/ItemInfoScreen';
 import CartScreen from './screens/CartScreen';
 export default () => (
     <Layout>
-        <Route exact path='/' component={HomeScreen} />
-        <Route exact path='/items' component={ItemInfoScreen} />
-        <Route exact path='/cart' component={CartScreen} />
+        <Route exact path='/items/home' component={HomeScreen} />
+        <Route exact path='/items/items' component={ItemInfoScreen} />
+        <Route exact path='/items/cart' component={CartScreen} />
     </Layout>
 );

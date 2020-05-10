@@ -1,7 +1,6 @@
 ﻿@model string
 @{
     ViewData["Title"] = "Send Email Confirmation";
-    Layout = AppConst.DEFAULT_LAYOUT;
 }
 <div class="row">
     <div class="col-md-12 col-lg-12 col-sm-12">
@@ -13,7 +12,7 @@
             <br />
             <button class="btn btn-lg btn-primary btn-block" type="submit">Send</button>
             <br />
-            <a href="/identity/login">Go to login</a>
+            <a asp-action="login" asp-controller="identity">Go to login</a>
             @await Html.PartialAsync(MvcHelper.GetComponentPath("notification", "_Notification"), ViewData["message"].ToViewMessage())
         </form>
     </div>

@@ -12,6 +12,7 @@
         public enum Modules { 
         
             None,
+            Gateway,
             Identity,
             Item,
             Order

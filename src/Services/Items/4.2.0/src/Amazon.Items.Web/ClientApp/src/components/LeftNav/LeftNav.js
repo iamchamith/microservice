@@ -4,11 +4,30 @@ import { Collapse, Container, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLi
 import { Link } from 'react-router-dom';
 import './Nav.css';
 import GlobalConfig from '../../GlobalConfig';
+import ItemServices from '../../serviceRepository/ItemServices';
+import Request from '../../serviceRepository/Request';
 export default class LeftNav extends React.Component {
     constructor(props) {
         super(props);
+        this._itemService = new ItemServices();
+        this.state = {
+            isAuthenticated: false,
+            isXhrCompleted: false
+        };
     }
-
+    async componentDidMount() {
+        await this.renderMenu();
+    }
+    async renderMenu() {
+        await this._itemService.IsAuthenticated(new Request('x'))
+            .then(response => {
+                this.setState({
+                    isAuthenticated: response.data,
+                    isXhrCompleted: true
+                });
+            }).catch((e) => {
+            });
+    }
     render() {
         return (<div className="sidebar">
             <div className="top-row pl-4 navbar navbar-dark">
@@ -22,14 +41,13 @@ export default class LeftNav extends React.Component {
                 <h4 className="nav-header">Shop</h4>
                 <ul className="nav flex-column">
                     <li className="nav-item px-3">
-                        <a href="/" className="nav-link">
+                        <a href="/items/home" className="nav-link">
                             <span className="oi oi-home" aria-hidden="true"></span> Shop
                     </a>
                     </li>
                 </ul>
             </div>
-
-            <div className="collapse">
+            {this.state.isAuthenticated ? (<div className="collapse">
                 <h4 className="nav-header">Order</h4>
                 <ul className="nav flex-column">
                     <li className="nav-item px-3">
@@ -43,8 +61,9 @@ export default class LeftNav extends React.Component {
                     </a>
                     </li>
                 </ul>
-            </div>
-            <div className="collapse">
+            </div>) : <div></div>}
+
+            {this.state.isAuthenticated ? (<div className="collapse">
                 <h4 className="nav-header">Account</h4>
                 <ul className="nav flex-column">
                     <li className="nav-item px-3">
@@ -63,7 +82,17 @@ export default class LeftNav extends React.Component {
                     </a>
                     </li>
                 </ul>
-            </div>
+            </div>) : (<div className="collapse">
+                <h4 className="nav-header">Account</h4>
+                <ul className="nav flex-column">
+                    <li className="nav-item px-3">
+                        <a href={GlobalConfig.Identity + "/identity/login"} className="nav-link">
+                            <span className="oi oi-home" aria-hidden="true"></span> Login
+                    </a>
+                    </li>
+                </ul>
+            </div>)}
+
         </div>);
     }
 

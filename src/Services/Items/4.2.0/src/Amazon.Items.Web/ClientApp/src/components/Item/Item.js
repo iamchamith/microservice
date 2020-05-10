@@ -9,7 +9,7 @@ export default class Item extends React.Component {
     }
 
     render() {
-        let url = "/items?id=" + this.props.data.id;
+        let url = "/items/items?id=" + this.props.data.id;
         return (<div className="card">
             <NavLink tag={Link} className="text-dark" to={url}>
                 <img className="card-img item-image" src={this.props.data.image} alt={this.props.data.name} />

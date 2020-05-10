@@ -1,7 +1,6 @@
 ﻿@model RegisterViewModel
 @{
     ViewData["Title"] = "Login";
-    Layout = AppConst.DEFAULT_LAYOUT;
 }
 <div class="row">
     <div class="col-md-12 col-lg-12 col-sm-12">
@@ -20,7 +19,7 @@
             <span asp-validation-for="Password" class="text-danger"></span>
             <br />
             <button class="btn btn-lg btn-primary btn-block" type="submit">Register</button>
-            <a href="/Identity/Login">Login</a>
+            <a asp-action="login" asp-controller="identity">Login</a>
             @await Html.PartialAsync(MvcHelper.GetComponentPath("notification", "_Notification"), ViewData["message"].ToViewMessage())
         </form>
     </div>

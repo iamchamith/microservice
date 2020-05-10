@@ -1,11 +1,10 @@
 ﻿@model LoginViewModel
 @{
     ViewData["Title"] = "Login";
-    Layout = AppConst.DEFAULT_LAYOUT;
 }
 <div class="row">
     <div class="col-md-12 col-lg-12 col-sm-12">
-        <form class="form-signin" method="post" asp-controller="identity" asp-action="login">
+        <form class="form-signin" method="post" action="identity/identity/login">
             <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
             <label>Email address</label>
             <input asp-for="Email" class="form-control" autofocus />
@@ -20,8 +19,8 @@
                 </label>
             </div>
             <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
-            <a href="/identity/register">Register</a> |
-            <a href="/identity/forgetpassword">Forget Password</a>
+            <a asp-controller="identity" asp-action="register">Register</a> |
+            <a asp-controller="identity" asp-action="forgetpassword">Forget Password</a>
 
             @await Html.PartialAsync(MvcHelper.GetComponentPath("notification", "_Notification"), ViewData["message"].ToViewMessage())
         </form>

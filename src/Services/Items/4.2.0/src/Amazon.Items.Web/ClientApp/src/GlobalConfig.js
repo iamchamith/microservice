@@ -1,8 +1,9 @@
 ﻿class GlobalConfig {
 
-    static ApiV1 = "https://localhost:5001/items-service/api/v1";
-    static Identity = 'https://localhost:5000';
-    static Order = 'https://localhost:5002';
-    static Item = 'https://localhost:5001';
+    static ApiV1 = "http://localhost:8000/items-service/api/v1";
+    static Identity = 'http://localhost:8000/identity';
+    static IdentityApi = 'http://localhost:8000';
+    static Order = 'http://localhost:8000';
+    static Item = 'http://localhost:8000';
 }
 export default GlobalConfig;

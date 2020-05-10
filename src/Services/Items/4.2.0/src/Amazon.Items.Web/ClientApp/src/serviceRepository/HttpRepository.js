@@ -7,6 +7,10 @@ class HttpRepository {
         axios.defaults.headers.post["Content-Type"] =
             "application/x-www-form-urlencoded";
     }
+    async GetAbsalute(request) {
+        axios.defaults.headers.common["Authorization"] = request.Token;
+        return await axios.get(`${request.Urn}`);
+    }
     async Get(request) {
         axios.defaults.headers.common["Authorization"] = request.Token;
         return await axios.get(`${this.ApiEndpoint}${request.Urn}`);

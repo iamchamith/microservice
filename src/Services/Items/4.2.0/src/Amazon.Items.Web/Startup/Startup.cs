@@ -20,16 +20,18 @@ namespace Amazon.Items.Web.Startup
     public class Startup
     {
         IConfiguration _configuration { get; set; }
+        readonly string _default = "_default";
         public Startup(IConfiguration configuration)
         {
             _configuration = configuration;
+            new ItemGlobalConfig(_configuration);
         }
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            new ItemGlobalConfig(_configuration);
+
             services.AddAbpDbContext<ItemsDbContext>(options =>
             {
-                DbContextOptionsConfigurer.Configure(options.DbContextOptions, options.ConnectionString);
+                DbContextOptionsConfigurer.Configure(options.DbContextOptions, "Data Source=DESKTOP-LE44UH9;Initial Catalog=Amazon;Integrated Security=True");
             });
 
             services.AddMvc(options =>
@@ -45,6 +47,17 @@ namespace Amazon.Items.Web.Startup
                 configuration.RootPath = "ClientApp/build";
             });
 
+            services.AddCors(options =>
+            {
+                options.AddPolicy(_default,
+                                  builder =>
+                                  {
+                                      builder.WithOrigins("http://localhost:5001",
+                                                          "http://localhost:8000")
+                                                          .AllowAnyHeader()
+                                                          .AllowAnyMethod();
+                                  });
+            });
             services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect("127.0.0.1:6379,allowAdmin=true"));
             return services.AddAbp<ItemsWebModule>(options =>
             {
@@ -71,7 +84,7 @@ namespace Amazon.Items.Web.Startup
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Item Api");
             });
             app.UseStaticFiles();
-
+            app.UseCors(_default);
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

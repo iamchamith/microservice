@@ -1,11 +1,12 @@
 ﻿import BaseService from "./BaseService";
-
+import GlobalConfig from '../GlobalConfig';
 class ItemServices extends BaseService {
     constructor() {
         super();
         this.GetBrandsUrn = "/brands";
         this.GetBrandsKeyValuePairUrn = '/brands/keyvalues';
         this.GetItemsUrn = "/items"; 
+        this.IsAuthenticatedUrn = "/identity-api/users/authorized"; 
     }
     async GetBrands(request) {
         request.SetUrn(`${this.GetBrandsUrn}`);
@@ -23,6 +24,10 @@ class ItemServices extends BaseService {
     async GetItems(request) {
         request.SetUrn(`${this.GetItemsUrn}`);
         return await this.xhrRequest.Get(request);
+    }
+    async IsAuthenticated(request) {
+        request.SetUrn(`${GlobalConfig.IdentityApi}${this.IsAuthenticatedUrn}`);
+        return await this.xhrRequest.GetAbsalute(request);
     }
 }
 
